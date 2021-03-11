@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+my profile
+{% endblock %}
+
+{% block content %}
+{{ obj.email }}
+<hr>
+{% if confirm %}
+<div class="ui green message">Your profile has been updated</div>
+{% endif %}
+<form action="" method="POST" class="ui form" enctype="multipart/form-data">
+{% csrf_token %}
+{{ form.as_p }}<br>
+<button type="submit">Edit Profile</button>
+</form>
+</ul>
+<hr>
+<p>number of posts:</p>
+{{ obj.get_posts_no }}
+{% endblock %}
