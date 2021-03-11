@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul>
+{#    <!--    <li><a href="{% url 'list_of_questions'%}">Questions</a></li>-->#}
+{#    <!--    <li><a href="{% url 'register_answer'%}">Answer</a></li>-->#}
+    <li><a href="{% url 'admin:index' %}">Admin panel</a></li>
+
+</ul>
+
+{#    {% if user.is_authenticated %}#}
+{#<ul>#}
+{#    <li><a href="{% url 'list_of_questions'%}">Questions</a></li>#}
+{#    <li><a href="{% url 'register_answer'%}">Answer</a></li>#}
+{#</ul>#}
+<form method="post">
+
+    {% csrf_token %}
+    <input name="logout" type="hidden" value="logout">
+    <button type="submit">Logout</button>
+</form>
+
+<form method="post">
+
+    {% csrf_token %}
+    Username: <input name="username" type="text"></br>
+    Password: <input name="password" type="password"></br>
+    <button type="submit">Login</button>
+
+</form>
+
+
+<p>{{ message }}</p>
+</body>
+</html>
