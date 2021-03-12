@@ -24,6 +24,7 @@ from django_extensions.db.fields import AutoSlugField
 #         profiles = Profile.objects.all().exclude(user=me)
 #         return profiles
 # from apps.profiles.managers import UserManager
+from apps.profiles.managers import UserManager
 
 
 class Profile(AbstractUser,PermissionsMixin):
@@ -44,11 +45,10 @@ class Profile(AbstractUser,PermissionsMixin):
     is_superuser = models.BooleanField('superuser', default=False)
     is_staff = models.BooleanField('staff', default=False)
 
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    # objects = UserManager()
+    objects = UserManager()
 
     def __str__(self):
         return '{}'.format(self.email)
