@@ -71,3 +71,4 @@ def edit_my_profile_view(request):
             confirm = True
     context = {'obj': obj, 'form': form, 'confirm': confirm}
     return render(request, 'profiles/myprofile.html', context)
+

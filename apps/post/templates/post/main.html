@@ -20,8 +20,12 @@
                     </div>
                     <div class="content">
                         <p>{{ obj.content }}</p>
-                        {{ obj.image }}
-                        <small>{{ obj.created|age }}</small>
+                        <div class="ui fluid image">
+                            {% if obj.image %}
+                                <img src={{obj.image.url}}>
+                            {% endif %}
+                    </div>
+                    <small>{{ obj.created|age }}</small>
                     </div>
                     <div class="content">
                         <form action="{% url 'posts:like-post-view' %}" method="post">
