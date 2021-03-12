@@ -21,13 +21,10 @@ from common import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('', include('apps.profiles.urls', namespace='profiles')),
+    path('profiles/', include('apps.profiles.urls', namespace='profiles')),
     path('posts/', include('apps.post.urls', namespace='posts')),
+    # path('accounts/', include('django.contrib.auth.urls')),
     ]
-    # path('signup/', views.SignupView.as_view(), name='signup'),
-    # path('logout/', views.logout, name='logout'),
-    # path('login/', views.LoginView.as_view(), name='login'),
-    # path('home/',TemplateView.as_view(template_name='index.html'), name='home'),
+
 
 

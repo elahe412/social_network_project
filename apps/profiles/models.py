@@ -24,7 +24,7 @@ from django_extensions.db.fields import AutoSlugField
 #         profiles = Profile.objects.all().exclude(user=me)
 #         return profiles
 # from apps.profiles.managers import UserManager
-from apps.profiles.managers import UserManager
+from apps.profiles.managers import CustomUserManager
 
 
 class Profile(AbstractUser,PermissionsMixin):
@@ -48,7 +48,7 @@ class Profile(AbstractUser,PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    objects = UserManager()
+    objects = CustomUserManager()
 
     def __str__(self):
         return '{}'.format(self.email)

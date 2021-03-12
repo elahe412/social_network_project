@@ -7,7 +7,10 @@ from . import views
 app_name = 'profiles'
 
 urlpatterns = [
-    path('', views.index, name="home"),
-    path('sign_up/', views.sign_up, name="sign-up"),
+    path('signup/', views.SignupView.as_view(), name='signup'),
+    path('', views.Dashboard, name='dashboard'),
+    path('logout/', views.Logout, name='logout'),
+    path('login/', views.LoginView.as_view(), name='login'),
     path('edit_myprofile/', edit_my_profile_view, name='my_profile_view'),
     ]
+

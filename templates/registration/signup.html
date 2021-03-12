@@ -1,6 +1,14 @@
-
-<form method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Sign up">
-</form>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <form class="" action="" method="post">
+      {% csrf_token %}
+      {{form.as_p}}
+      <input type="submit" name="signup" value="Signup">
+    </form>
+  </body>
+</html>
