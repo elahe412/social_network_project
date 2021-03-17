@@ -10,9 +10,9 @@ from apps.post.forms import PostModelForm, CommentModelform
 from apps.post.models import Post, Like, Comment
 from apps.profiles.models import Profile
 
+
 def post_comment_create_and_list_view(request):
     qs = Post.objects.all()
-
     # initials
     p_form = PostModelForm()
     c_form = CommentModelform()
