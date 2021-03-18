@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    create post
+{% endblock title %}
+
+{% block content %}
+
+        <div class="five wide column">
+            {% if post_added %}
+                <div class="ui green message">Post added</div>
+            {% endif %}
+            <form action="" method="POST" class="ui form" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ p_form }}
+                <button type="submit" class="ui button positive"name="submit_p_form">Send Post</button>
+            </form>
+        </div>
+
+
+{% endblock content %}

@@ -1,10 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ object.email }} profile</title>
 </head>
 <body>
+<div>
+    <h1>{{ object.email }}</h1>
+    <p>{{ object.get_full_name }}</p>
+    <p>{{ object.bio }}</p>
+    <p>{{ object.website }}</p>
+</div>
+<hr>
+<div>
+<table>
+    <tr>
+    <th>posts</th>
+    <th>followers</th>
+    <th>followings</th>
+    </tr>
+    <tr>
+    <td> {{ object.get_posts_no }}</td>
+        <td><a href=>{{ object.get_followers_no }}</a></td>
+        <td><a href={% url 'profiles:followings_list' %}>{{ object.get_followings_no }}</a></td>
+    </tr>
 
+</table>
+
+<hr>
+
+<p>followings:</p>
+{% for profile in object.get_followings %}
+    <li>{{ profile }}</li>
+{% endfor %}
+
+<p>followers:</p>
+{% for profile in object.get_followers %}
+    <li>{{ profile }}</li>
+{% endfor %}
+<hr>
+<p>posts:</p>
+{% for post in object.get_all_authors_posts %}
+    <li> {{ post }}</li>
+{% endfor %}
+</div>
 </body>
 </html>
+

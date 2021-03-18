@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>following</title>
+</head>
+<body>
+<h1>followings:</h1>
+{% for profile in qs %}
+    <li>{{ profile }}</li>
+{% endfor %}
+</body>
+</html>

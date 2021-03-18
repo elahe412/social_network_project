@@ -11,14 +11,16 @@
     <div class="row">
         <div class="eleven wide column">
             {% for obj in qs %}
+                {% if obj.author in request.user.get_followings or obj.author == request.user %}
                 <div class="ui fluid card">
                     <div class="row">
-                        {% ifequal request.user obj.author.user %}
+                        {% ifequal request.user obj.author %}
                             <a href="{% url 'posts:post-update' obj.pk %}"><button class="ui button bwhite-lg">Update</button></a>
                             <a href="{% url 'posts:post-delete' obj.pk %}"><button class="ui button bwhite-lg">Delete</button></a>
                         {% endifequal %}
                     </div>
                     <div class="content">
+                        <a href={{ obj.author.get_absolute_url }}>{{ obj.author }}</a>
                         <p>{{ obj.content }}</p>
                         <div class="ui fluid image">
                             {% if obj.image %}
@@ -44,13 +46,13 @@
                     <div>
                     {% if obj.comment_set.all %}
                         {% for c in obj.comment_set.all %}
-                            <p><a href="">{{ c.user }}</a> : {{ c.body }}<br>
+                            <p><a href={{ c.user.get_absolute_url }}>{{ c.user }}</a> : {{ c.body }}<br>
                             <small>{{ c.created | age }}</small></p>
                             <div class="row">
-                                {% ifequal request.user obj.author.user %}
+                                {% if request.user == obj.author or request.user == c.user %}
                                     <a href="{% url 'posts:post-update' obj.pk %}"><button class="ui button bwhite-lg">Update</button></a>
                                     <a href="{% url 'posts:post-delete' obj.pk %}"><button class="ui button bwhite-lg">Delete</button></a>
-                                {% endifequal %}
+                                {% endif %}
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -63,18 +65,19 @@
                         {{ obj.num_comments }}
                     </form>
                 </div>
+                {% endif %}
             {% endfor %}
         </div>
-        <div class="five wide column">
-            {% if post_added %}
-                <div class="ui green message">Post added</div>
-            {% endif %}
-            <form action="" method="POST" class="ui form" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ p_form }}
-                <button type="submit" class="ui button positive"name="submit_p_form">Send Post</button>
-            </form>
-        </div>
+{#        <div class="five wide column">#}
+{#            {% if post_added %}#}
+{#                <div class="ui green message">Post added</div>#}
+{#            {% endif %}#}
+{#            <form action="" method="POST" class="ui form" enctype="multipart/form-data">#}
+{#                {% csrf_token %}#}
+{#                {{ p_form }}#}
+{#                <button type="submit" class="ui button positive"name="submit_p_form">Send Post</button>#}
+{#            </form>#}
+{#        </div>#}
     </div>
 
 </div>

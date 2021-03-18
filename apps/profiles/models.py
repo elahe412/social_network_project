@@ -47,6 +47,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return reverse("profiles:profile-detail-view", kwargs={"slug": self.slug})
 
+    def get_full_name(self):
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
     def get_followers(self):
         return self.follower.all()
 

@@ -6,13 +6,13 @@
   </head>
   <body>
 {% if request.user.is_authenticated %}
-<h1>Congratulations!! You are now logged In dear {{request.user.name}} </h1>
+<h1>Congratulations!! You are now logged In dear {{request.user.email}} </h1>
 <div class="">
-<button type="button" name="button"><a href="{% url 'profiles:logout' %}">Logout</a></button>
+<button type="button" name="button"><a href="{% url 'logout' %}">Logout</a></button>
 </div>
 {% else %}
 <h1>You Are Not logged in. Access Denied</h1>
-<button type="button" name="button"><a href="{% url 'profiles:login' %}">Login</a></button>
+<button type="button" name="button"><a href="{% url 'login' %}">Login</a></button>
 
 {%endif%}
   </body>

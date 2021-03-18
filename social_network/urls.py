@@ -19,13 +19,16 @@ from django.contrib import admin
 from django.urls import path,include
 from django.views.generic import TemplateView
 
-from common import views
+from apps.profiles.views import LoginView, SignupView, Dashboard, Logout
 
 urlpatterns = [
+    path('', LoginView.as_view(), name='login'),
+    path('signup/', SignupView.as_view(), name='signup'),
+    path('home/', Dashboard, name='dashboard'),
+    path('logout/', Logout, name='logout'),
     path('admin/', admin.site.urls),
     path('profiles/', include('apps.profiles.urls', namespace='profiles')),
     path('posts/', include('apps.post.urls', namespace='posts')),
-    # path('accounts/', include('django.contrib.auth.urls')),
     ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
