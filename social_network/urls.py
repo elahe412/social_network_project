@@ -17,9 +17,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
-from django.views.generic import TemplateView
 
-from apps.profiles.views import LoginView, SignupView, Dashboard, Logout
+
+from registration.views import LoginView, SignupView, Dashboard, Logout
 
 urlpatterns = [
     path('', LoginView.as_view(), name='login'),

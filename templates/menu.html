@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<header>
+    <nav style="background: rebeccapurple;color: black">
+        <ul>
+            {% if request.user.is_authenticated %}
+                <li><a href={% url 'logout' %}>logout</a></li>
+                <li><a href={% url 'posts:new_post' %}>new post</a></li>
+                <li><a href={% url 'profiles:my_profile_view' %}>edit profile</a></li>
+                <li><a href={% url 'profiles:profile-detail-view' request.user.slug %}>my profile</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+</body>
+</html>

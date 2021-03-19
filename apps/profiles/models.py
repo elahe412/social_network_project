@@ -20,7 +20,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=False)
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
-    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='', blank=True, max_length=300)
     avatar = models.ImageField(upload_to='avatars/', default='avatar.png')
     website = models.URLField(max_length=300, blank=True)

@@ -7,35 +7,13 @@ my profile
 {% block content %}
 {{ obj.email }}
 <hr>
-{% if confirm %}
-<div class="ui green message">Your profile has been updated</div>
-{% endif %}
+{#{% if confirm %}#}
+{#<div class="ui green message">Your profile has been updated</div>#}
+{#{% endif %}#}
 <form action="" method="POST" class="ui form" enctype="multipart/form-data">
 {% csrf_token %}
 {{ form.as_p }}<br>
 <button type="submit">Edit Profile</button>
 </form>
-</ul>
-<hr>
-<p>number of posts:</p>
-{{ obj.get_posts_no }}
-<p>number of followers:</p>
-{{ obj.get_followers_no }}
-<p>number of followings:</p>
-{{ obj.get_followings_no }}
-<hr>
-<ul>
-<p>followings:</p>
-{% for profile in obj.get_followings %}
-    <li>{{ profile }}</li>
-{% endfor %}
-</ul>
-<ul>
-<p>followers:</p>
-{% for profile in obj.get_followers %}
-    <li>{{ profile }}</li>
-{% endfor %}
-</ul>
 
-
-{% endblock %}
+{% endblock content %}

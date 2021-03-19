@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
+{% extends 'base.html' %}
+{% block title%}
+    welcome
+{% endblock title%}
+{% block content %}
 {% if request.user.is_authenticated %}
 <h1>Congratulations!! You are now logged In dear {{request.user.email}} </h1>
 <div class="">
@@ -15,5 +13,5 @@
 <button type="button" name="button"><a href="{% url 'login' %}">Login</a></button>
 
 {%endif%}
-  </body>
-</html>
+
+{% endblock content %}
