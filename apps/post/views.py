@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, UpdateView
@@ -34,6 +35,9 @@ def post_list_view(request):
     qs = Post.objects.all()
     c_form = CommentModelform()
     profile = Profile.objects.get(email=request.user)
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(qs, 5)
 
     if 'submit_c_form' in request.POST:
         c_form = CommentModelform(request.POST)
@@ -45,8 +49,15 @@ def post_list_view(request):
             c_form = CommentModelform()
             return redirect("posts:main-post-view")
 
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
     context = {
-        'qs': qs,
+        'posts':posts,
+        # 'qs': qs,
         'profile': profile,
         'c_form': c_form,
     }

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
@@ -30,6 +31,7 @@ def edit_my_profile_view(request):
     context = {'obj': obj, 'form': form, 'confirm': confirm}
     return render(request, 'profiles/edit_profile.html', context)
 
+
 class ProfileDetail(DetailView):
     model = Profile
     template_name = 'profiles/profile_details.html'
@@ -37,7 +39,20 @@ class ProfileDetail(DetailView):
 
 def followings_list(request):
     user = Profile.objects.get(email=request.user)
-    context = {'user': user}
+    followings_list = user.get_followings()
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(followings_list, 2)
+    try:
+        followings = paginator.page(page)
+    except PageNotAnInteger:
+        followings = paginator.page(1)
+    except EmptyPage:
+        followings = paginator.page(paginator.num_pages)
+
+    context = {'followings': followings}
+
     return render(request, 'profiles/followings_list.html', context)
 
 

@@ -9,6 +9,10 @@ urlpatterns = [
     path('<slug>/', ProfileDetail.as_view(), name='profile-detail-view'),
     path('edit_myprofile/', edit_my_profile_view, name='my_profile_view'),
     path('followings_list/', followings_list, name='followings_list'),
+
+
+
+
     # path('edit_myprofile/', ProfileUpdateView.as_view(), name='my_profile_view'),
     # path('send_follow_request/', send_follow_request, 'send_request'),
     # path('accept_follow_request/',accept_follow_request,'accept_request'),
