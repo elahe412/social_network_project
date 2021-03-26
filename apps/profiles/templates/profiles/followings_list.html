@@ -7,8 +7,8 @@
 <body>
 <h1>followings:</h1>
 
-{#{% for x in user.get_followings %}#}
-{#    <li>{{ x.email }}</li>#}
-{#{% endfor %}#}
+{% for x in user.get_followings %}
+    <li>{{ x.email }}</li>
+{% endfor %}
 </body>
 </html>

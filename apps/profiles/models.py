@@ -6,6 +6,7 @@ from django_extensions.db.fields import AutoSlugField
 
 from apps.profiles.managers import CustomUserManager
 
+
 class ProfileManager(models.Manager):
     def get_all_profiles(self, me):
         profiles = Profile.objects.all().exclude(user=me)
@@ -27,8 +28,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     gender = models.CharField(choices=GENDER, max_length=6, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    follower = models.ManyToManyField('profiles.Profile', blank=True,related_name='profile')
-    following = models.ManyToManyField('profiles.Profile', blank=True,related_name='followings')
+    follower = models.ManyToManyField('profiles.Profile', blank=True, related_name='profile')
+    following = models.ManyToManyField('profiles.Profile', blank=True, related_name='followings')
     slug = AutoSlugField(populate_from=['email'], unique=True)
     is_active = models.BooleanField('active', default=True)
     is_superuser = models.BooleanField('superuser', default=False)
@@ -84,19 +85,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         return total_liked
 
 
-#
-# class FollowManager(models.Manager):
-#     def invitations_received(self, follower):
-#         qs = Follow.objects.filter(follower=follower, status='send')
-#         return qs
-
-
-class Follow(models.Model):
+class FollowRequest(models.Model):
     following = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="who_follows")
     follower = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="who_is_followed")
-    STATUS_CHOICES = (('send', 'send'), ('accepted', 'accepted'), ('reject', 'reject'))
+    STATUS_CHOICES = (('send', 'send'), ('accepted', 'accepted'), ('rejected', 'rejected'))
     status = models.CharField(max_length=8, choices=STATUS_CHOICES)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
-
-    # objects=FollowManager()

@@ -10,6 +10,7 @@ from registration.forms import ProfileCreationForm
 
 class SignupView(FormView):
     """sign up user view"""
+
     form_class = ProfileCreationForm
     template_name = 'registration/signup.html'
     success_url = reverse_lazy('dashboard')
@@ -38,7 +39,10 @@ def Logout(request):
 
 class LoginView(View):
     def get(self, request):
-        return render(request, 'registration/login.html')
+        if request.user.is_authenticated:
+            return render(request,'registration/dashboard.html')
+        else:
+            return render(request, 'registration/login.html')
 
     def post(self, request):
         message = ''

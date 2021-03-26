@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% block title%}
-    {{ object.email }} profile
+
+{{ object.email }} profile
 {% endblock title%}
+
 {% block content %}
 
+<body>
 <div>
     <h1>{{ object.email }}</h1>
     <p>{{ object.get_full_name }}</p>
@@ -21,7 +24,7 @@
     <tr>
         <td> {{ object.get_posts_no }}</td>
         <td>{{ object.get_followers_no }}</td>
-        <td>{{ object.get_followings_no }}</td>
+        <td><a href={% url 'profiles:followings_list' %}> {{ object.get_followings_no }}</a></td>
     </tr>
 
 </table>
@@ -43,5 +46,6 @@
     <li> {{ post }}</li>
 {% endfor %}
 </div>
+</body>
 {% endblock content %}
 

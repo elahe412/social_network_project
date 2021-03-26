@@ -5,11 +5,11 @@ my profile
 {% endblock %}
 
 {% block content %}
-{{ obj.email }}
+{{ object.email }}
 <hr>
-{#{% if confirm %}#}
-{#<div class="ui green message">Your profile has been updated</div>#}
-{#{% endif %}#}
+{% if confirm %}
+<div class="ui green message">Your profile has been updated</div>
+{% endif %}
 <form action="" method="POST" class="ui form" enctype="multipart/form-data">
 {% csrf_token %}
 {{ form.as_p }}<br>
