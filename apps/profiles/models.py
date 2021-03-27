@@ -69,6 +69,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     def get_all_authors_posts(self):
         return self.posts.all()
 
+# they should be deleted:
+
     def get_likes_given_no(self):
         likes = self.like_set.all()
         total_liked = 0

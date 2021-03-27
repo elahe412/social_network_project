@@ -13,6 +13,7 @@
                 <li><a href={% url 'posts:new_post' %}>new post</a></li>
                 <li><a href={% url 'profiles:my_profile_view' %}>edit profile</a></li>
                 <li><a href={% url 'profiles:profile-detail-view' request.user.slug %}>my profile</a></li>
+                <li><a href={% url 'profiles:profiles_list' %}>profiles list</a></li>
             {% endif %}
         </ul>
     </nav>

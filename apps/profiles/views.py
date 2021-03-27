@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
 from apps.profiles.forms import ProfileModelForm
-from apps.profiles.models import Profile
+from apps.profiles.models import Profile, FollowRequest
 
 
 # class ProfileUpdateView(UpdateView):
@@ -36,6 +37,29 @@ class ProfileDetail(DetailView):
     model = Profile
     template_name = 'profiles/profile_details.html'
 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     user = Profile.objects.get(email__iexact=self.request.user)
+    #     profile = Profile.objects.get(email=self.request.user)
+    #     flw_r = FollowRequest.objects.filter(follower=profile)
+    #     flw_s = FollowRequest.objects.filter(following=profile)
+    #     rel_receiver = []
+    #     rel_sender = []
+    #     for item in rel_r:
+    #         rel_receiver.append(item.receiver.user)
+    #     for item in rel_s:
+    #         rel_sender.append(item.sender.user)
+    #     context["rel_receiver"] = rel_receiver
+    #     context["rel_sender"] = rel_sender
+    #     context['posts'] = self.get_object().get_all_authors_posts()
+    #     context['len_posts'] = True if len(self.get_object().get_all_authors_posts()) > 0 else False
+    #     return context
+
+class ProfilesList(ListView):
+    model = Profile
+    template_name = 'profiles/profiles_list.html'
+    context_object_name = 'profiles_list'
+    paginate_by = 3
 
 def followings_list(request):
     user = Profile.objects.get(email=request.user)
@@ -56,17 +80,36 @@ def followings_list(request):
     return render(request, 'profiles/followings_list.html', context)
 
 
-# @login_required()
-# def send_follow_request(request, user_id):
-#     follower = request.user
-#     following = Profile.objects.get(email=user_id)
-#     follow_request, created = FollowRequest.objects.get_or_create(follower=follower, following=following)
-#     if created:
-#         follow_request.status = 'send'
-#         follow_request.save()
-#         return HttpResponse("request send")
-#     else:
-#         return HttpResponse("request was already sent")
+def followers_list(request):
+    user = Profile.objects.get(email=request.user)
+    followers_list = user.get_followers()
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(followers_list, 2)
+
+    try:
+        followers = paginator.page(page)
+    except PageNotAnInteger:
+        followers = paginator.page(1)
+    except EmptyPage:
+        followers = paginator.page(paginator.num_pages)
+
+    context = {'followers': followers}
+
+    return render(request, 'profiles/followers_list.html', context)
+
+
+@login_required()
+def send_follow_request(request, user_id):
+    follower = request.user
+    following = Profile.objects.get(email=user_id)
+    follow_request, created = FollowRequest.objects.get_or_create(follower=follower, following=following)
+    if created:
+        follow_request.status = 'send'
+        follow_request.save()
+        return HttpResponse("request send")
+    else:
+        return HttpResponse("request was already sent")
 
 
 # @login_required()
@@ -104,11 +147,11 @@ def followings_list(request):
 #         rel.delete()
 #     return redirect('profiles:my-invites-view')
 
-class SearchView(ListView):
-    model = Profile
-    template_name = 'profiles/search.html'
-
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        object_list = Profile.objects.filter(email__icontains=query)
-        return object_list
+# class SearchView(ListView):
+#     model = Profile
+#     template_name = 'profiles/search.html'
+#
+#     def get_queryset(self):
+#         query = self.request.GET.get('q')
+#         object_list = Profile.objects.filter(email__icontains=query)
+#         return object_list

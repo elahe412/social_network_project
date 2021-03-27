@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from apps.profiles.views import followings_list, ProfileDetail, edit_my_profile_view
+from apps.profiles.views import followings_list, ProfileDetail, edit_my_profile_view, followers_list,ProfilesList
 
 app_name = 'profiles'
 
@@ -9,6 +9,8 @@ urlpatterns = [
     path('<slug>/', ProfileDetail.as_view(), name='profile-detail-view'),
     path('edit_myprofile/', edit_my_profile_view, name='my_profile_view'),
     path('followings_list/', followings_list, name='followings_list'),
+    path('followers_list/', followers_list, name='followers_list'),
+    path('profiles_list/',ProfilesList.as_view(), name='profiles_list'),
 
 
 

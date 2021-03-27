@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>following</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}
+following
+{% endblock title %}
+
+{% block content %}
+
 <h1>followings:</h1>
 
-{#{% for x in user.get_followings %}#}
-{#    <li>{{ x.email }}</li>#}
-{#{% endfor %}#}
+
 {% for x in followings %}
     <li>{{ x.email }}</li>
 {% endfor %}
@@ -35,5 +33,4 @@
     {% endif %}
   </ul>
 {% endif %}
-</body>
-</html>
+{% endblock content %}

@@ -5,7 +5,7 @@ my profile
 {% endblock %}
 
 {% block content %}
-{{ object.email }}
+{{ obj.email }}
 <hr>
 {% if confirm %}
 <div class="ui green message">Your profile has been updated</div>
@@ -15,5 +15,6 @@ my profile
 {{ form.as_p }}<br>
 <button type="submit">Edit Profile</button>
 </form>
+<a href={% url 'change_password' %}>change password</a>
 
 {% endblock content %}

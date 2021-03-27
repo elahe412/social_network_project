@@ -16,7 +16,7 @@ class Post(models.Model):
     # slug = AutoSlugField(populate_from=['id'])
 
     def get_absolute_url(self):
-        return reverse("posts:post-detail-view", kwargs={"id": str(self.id)})
+        return reverse("posts:post-detail-view", kwargs={"pk": self.id})
 
     def __str__(self):
         return str(self.content[:20])

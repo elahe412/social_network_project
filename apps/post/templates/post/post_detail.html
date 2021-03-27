@@ -7,7 +7,6 @@
     <div class="ui grid">
         <div class="row">
             <div class="eleven wide column">
-                {#                {% for obj in post %}#}
                 <div class="ui fluid card">
                     <div class="row">
                         {% ifequal request.user post.author.user %}
@@ -26,10 +25,6 @@
                         <p class="card-text text-dark"> {{ post.content }}</p>
                         <small class="text-muted">Posted on: {{ post.created }}</small>
                     </div>
-{#                    <div class="content">#}
-                        {#                            <img src="{{ post.image }}" width="30" height="30" alt="">#}
-                        {#                            <a href="" {{ post.author }}></a>: {{ post.content }}#}
-{#                    </div>#}
                     <hr>
                     <div class="content">
                         <form action="" method="post">
@@ -48,7 +43,7 @@
                     <div>
                         {% if post.comment_set.all %}
                             {% for c in post.comment_set.all %}
-                                <p><a href=""> {{ c.user }}</a> : {{ c.body }}
+                                <p><a href={{ c.user.get_absolute_url }}> {{ c.user }}</a> : {{ c.body }}
                                     <br>
                                     <small>{{ c.created }}</small></p>
                                 <div class="row">
@@ -74,18 +69,8 @@
                         {{ post.num_comments }} <small>comments</small>
                     </form>
                 </div>
-                {#                {% endfor %}#}
             </div>
-            {#            <div class="five wide column">#}
-            {#                {% if post_added %}#}
-            {#                    <div class="ui green message">Post added</div>#}
-            {#                {% endif %}#}
-            {#                <form action="" method="POST" class="ui form" enctype="multipart/form-data">#}
-            {#                    {% csrf_token %}#}
-            {#                    {{ p_form }}#}
-            {#                    <button type="submit" class="ui button positive" name="submit_p_form">Send Post</button>#}
-            {#                </form>#}
-            {#            </div>#}
+
         </div>
 
     </div>

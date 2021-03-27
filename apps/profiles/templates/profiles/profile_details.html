@@ -13,6 +13,9 @@
     <p>{{ object.bio }}</p>
     <p>{{ object.website }}</p>
 </div>
+<div>
+
+</div>
 <hr>
 <div>
 <table>
@@ -23,7 +26,7 @@
     </tr>
     <tr>
         <td> {{ object.get_posts_no }}</td>
-        <td>{{ object.get_followers_no }}</td>
+        <td><a href={% url 'profiles:followers_list' %}> {{ object.get_followers_no }}</a></td>
         <td><a href={% url 'profiles:followings_list' %}> {{ object.get_followings_no }}</a></td>
     </tr>
 
@@ -33,17 +36,17 @@
 
 <p>followings:</p>
 {% for profile in object.get_followings %}
-    <li>{{ profile }}</li>
+    <li><a href={{ profile.get_absolute_url }}> {{ profile }}</a></li>
 {% endfor %}
 
 <p>followers:</p>
 {% for profile in object.get_followers %}
-    <li>{{ profile }}</li>
+    <li><a href={{ profile.get_absolute_url }}> {{ profile }}</a></li>
 {% endfor %}
 <hr>
 <p>posts:</p>
 {% for post in object.get_all_authors_posts %}
-    <li> {{ post }}</li>
+    <li><a href={{ post.get_absolute_url }}>{{ post }}</a></li>
 {% endfor %}
 </div>
 </body>

@@ -139,22 +139,21 @@ def post_detail(request, pk):
     user = request.user
     qs = Post.objects.all()
 
-    # initials
-    p_form = PostModelForm()
+    # p_form = PostModelForm()
     c_form = CommentModelform()
     post_added = False
 
     profile = Profile.objects.get(email=request.user)
-
-    if 'submit_p_form' in request.POST:
-        p_form = PostModelForm(request.POST, request.FILES)
-        if p_form.is_valid():
-            instance = p_form.save(commit=False)
-            instance.author = profile
-            instance.save()
-            p_form = PostModelForm()
-            post_added = True
-            return redirect('post-detail', pk=pk)
+    #
+    # if 'submit_p_form' in request.POST:
+    #     p_form = PostModelForm(request.POST, request.FILES)
+    #     if p_form.is_valid():
+    #         instance = p_form.save(commit=False)
+    #         instance.author = profile
+    #         instance.save()
+    #         p_form = PostModelForm()
+    #         post_added = True
+    #         return redirect('posts:post-detail-view', pk=pk)
 
     if 'submit_c_form' in request.POST:
         c_form = CommentModelform(request.POST)
@@ -164,7 +163,7 @@ def post_detail(request, pk):
             instance.post = Post.objects.get(id=request.POST.get('post_id'))
             instance.save()
             c_form = CommentModelform()
-            return redirect('posts:post-detail', pk=pk)
+            return redirect('posts:post-detail-view', pk=pk)
 
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
@@ -191,7 +190,7 @@ def post_detail(request, pk):
     context = {
         'post': post,
         'profile': profile,
-        'p_form': p_form,
+        # 'p_form': p_form,
         'c_form': c_form,
         'post_added': post_added,
     }

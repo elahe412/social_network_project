@@ -16,22 +16,23 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 
-
-from registration.views import LoginView, SignupView, Dashboard, Logout
+from registration.views import LoginView, Dashboard, Logout, change_password, SignupView,ActivateView
 
 urlpatterns = [
     path('', LoginView.as_view(), name='login'),
     path('signup/', SignupView.as_view(), name='signup'),
+    path('activate/<uidb64>/<token>/',ActivateView.as_view(), name='activate'),
+    # path('singup/', usersignup, name='signup'),
+    # path('activate/',activate_account, name='activate'),
+    path('change_password/', change_password, name='change_password'),
     path('home/', Dashboard, name='dashboard'),
     path('logout/', Logout, name='logout'),
     path('admin/', admin.site.urls),
     path('profiles/', include('apps.profiles.urls', namespace='profiles')),
     path('posts/', include('apps.post.urls', namespace='posts')),
-    ]
+
+]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-
-
