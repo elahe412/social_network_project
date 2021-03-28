@@ -1,7 +1,7 @@
 from django.urls import path
-from django.views.generic import TemplateView
 
-from apps.profiles.views import followings_list, ProfileDetail, edit_my_profile_view, followers_list,ProfilesList
+from apps.profiles.views import followings_list, ProfileDetail, edit_my_profile_view, followers_list, ProfilesList, \
+    requests_received_view, accept_follow_request, decline_follow_request
 
 app_name = 'profiles'
 
@@ -10,10 +10,10 @@ urlpatterns = [
     path('edit_myprofile/', edit_my_profile_view, name='my_profile_view'),
     path('followings_list/', followings_list, name='followings_list'),
     path('followers_list/', followers_list, name='followers_list'),
-    path('profiles_list/',ProfilesList.as_view(), name='profiles_list'),
-
-
-
+    path('profiles_list/', ProfilesList.as_view(), name='profiles_list'),
+    path('follow_requests/', requests_received_view, name='follow_requests'),
+    path('accept_request/', accept_follow_request, name='accept_request'),
+    path('decline_request/',  decline_follow_request, name='decline_request'),
 
     # path('edit_myprofile/', ProfileUpdateView.as_view(), name='my_profile_view'),
     # path('send_follow_request/', send_follow_request, 'send_request'),

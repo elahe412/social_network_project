@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} follow requests {% endblock title%}
+
+{% block content%}
+
+{% if is_empty %}
+    <h1>No requests</h1>
+{% endif %}
+{% for request in requests %}
+        <h1>Your requests:</h1>
+    <li><a href={{ request.follower.get_absolute_url }}>{{ request.follower.email }}</a></li>
+    <form action="{% url 'posts:accept_request' request.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="ui positive basic button w-big mb-5">
+        <i class="check icon"></i>
+        Accept
+    </button>
+    </form>
+    <form action="{% url 'posts:decline_request' request.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="ui negative basic button w-big mb-5">
+        <i class="close icon"></i>
+        Decline
+    </button>
+    </form>
+{% endfor %}
+{% endblock content %}

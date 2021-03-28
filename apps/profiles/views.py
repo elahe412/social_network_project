@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 
 from apps.profiles.forms import ProfileModelForm
@@ -55,11 +55,13 @@ class ProfileDetail(DetailView):
     #     context['len_posts'] = True if len(self.get_object().get_all_authors_posts()) > 0 else False
     #     return context
 
+
 class ProfilesList(ListView):
     model = Profile
     template_name = 'profiles/profiles_list.html'
     context_object_name = 'profiles_list'
     paginate_by = 3
+
 
 def followings_list(request):
     user = Profile.objects.get(email=request.user)
@@ -99,6 +101,23 @@ def followers_list(request):
     return render(request, 'profiles/followers_list.html', context)
 
 
+@login_required
+def requests_received_view(request):
+    profile = Profile.objects.get(email=request.user)
+    qs = FollowRequest.objects.requests_received(profile)
+    # results = list(map(lambda x: x.follower, qs))
+    is_empty = False
+    if len(qs) == 0:
+        is_empty = True
+
+    context = {
+        'requests': qs,
+        'is_empty': is_empty,
+    }
+
+    return render(request, 'profiles/my_requests.html', context)
+
+
 @login_required()
 def send_follow_request(request, user_id):
     follower = request.user
@@ -112,32 +131,25 @@ def send_follow_request(request, user_id):
         return HttpResponse("request was already sent")
 
 
-# @login_required()
-# def accept_follow_request(request, request_id):
-#     follow_request = FollowRequest.objects.get(id=request_id)
-#     if follow_request.following == request.user:
-#         follow_request.following.follower.add(follow_request.follower)
-#         follow_request.follower.following.add(follow_request.following)
-#         follow_request.status = 'accepted'
-#         follow_request.save()
-#         return HttpResponse('follow request accepted')
-#     else:
-#         follow_request.status = 'rejected'
-#         follow_request.save()
-#         return HttpResponse('request not accepted')
+@login_required()
+def accept_follow_request(request,request_id):
+    follow_request = FollowRequest.objects.get(id=request_id)
+    if request.method == "POST":
+        follow_request.following.follower.add(follow_request.follower)
+        follow_request.follower.following.add(follow_request.following)
+        follow_request.status = 'accepted'
+        follow_request.save()
+        return redirect('posts:follow_requests')
 
 
-# @login_required()
-# def decline_follow_request(request):
-#     if request.method=="POST":
-#         pk = request.POST.get('profile_pk')
-#         receiver = Profile.objects.get(user=request.user)
-#         sender = Profile.objects.get(pk=pk)
-#         rel = get_object_or_404(Relationship, sender=sender, receiver=receiver)
-#         rel.delete()
-#     return redirect('profiles:my-invites-view')
-#
-#
+@login_required()
+def decline_follow_request(request, request_id):
+    follow_request = FollowRequest.objects.get(id=request_id)
+    if request.method == "POST":
+        follow_request.delete()
+    return redirect('posts:follow_requests')
+
+
 # def reject_invatation(request):
 #     if request.method=="POST":
 #         pk = request.POST.get('profile_pk')

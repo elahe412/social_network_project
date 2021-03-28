@@ -30,6 +30,7 @@ def create_new_post(request):
         'post_added': post_added}
     return render(request, 'post/new_post.html', context)
 
+
 @login_required
 def post_list_view(request):
     qs = Post.objects.all()
@@ -56,7 +57,7 @@ def post_list_view(request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
     context = {
-        'posts':posts,
+        'posts': posts,
         # 'qs': qs,
         'profile': profile,
         'c_form': c_form,
@@ -137,23 +138,10 @@ class CommentDelete(DeleteView):
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     user = request.user
-    qs = Post.objects.all()
 
-    # p_form = PostModelForm()
     c_form = CommentModelform()
-    post_added = False
 
     profile = Profile.objects.get(email=request.user)
-    #
-    # if 'submit_p_form' in request.POST:
-    #     p_form = PostModelForm(request.POST, request.FILES)
-    #     if p_form.is_valid():
-    #         instance = p_form.save(commit=False)
-    #         instance.author = profile
-    #         instance.save()
-    #         p_form = PostModelForm()
-    #         post_added = True
-    #         return redirect('posts:post-detail-view', pk=pk)
 
     if 'submit_c_form' in request.POST:
         c_form = CommentModelform(request.POST)
@@ -190,9 +178,6 @@ def post_detail(request, pk):
     context = {
         'post': post,
         'profile': profile,
-        # 'p_form': p_form,
         'c_form': c_form,
-        'post_added': post_added,
     }
     return render(request, 'post/post_detail.html', context)
-

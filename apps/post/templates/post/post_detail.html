@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load post_custom_tags %}
 {% block title %}
-    <p><a href="{{ request.user }}"></a>'s post</p>
+    {{ request.user }}'s post
 {% endblock title %}
 
 {% block content %}
@@ -23,7 +24,7 @@
                         <a class="text-dark"
                            href="{{ post.author.profile.get_absolute_url }}"><b>{{ post.author }}</b></a>
                         <p class="card-text text-dark"> {{ post.content }}</p>
-                        <small class="text-muted">Posted on: {{ post.created }}</small>
+                        <small class="text-muted">Posted on: {{ post.created|age }}</small>
                     </div>
                     <hr>
                     <div class="content">
@@ -45,7 +46,7 @@
                             {% for c in post.comment_set.all %}
                                 <p><a href={{ c.user.get_absolute_url }}> {{ c.user }}</a> : {{ c.body }}
                                     <br>
-                                    <small>{{ c.created }}</small></p>
+                                    <small>{{ c.created|age }}</small></p>
                                 <div class="row">
                                     {% ifequal request.user post.author.user %}
                                         <a href="{% url 'posts:post-update' post.pk %}">

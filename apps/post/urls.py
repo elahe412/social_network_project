@@ -1,7 +1,8 @@
 from django.urls import path
 from apps.post import views
 from apps.post.views import like_unlike_post, PostDeleteView, PostUpdateView, post_list_view
-from apps.profiles.views import followings_list, edit_my_profile_view, followers_list, ProfilesList
+from apps.profiles.views import followings_list, edit_my_profile_view, followers_list, ProfilesList, \
+    requests_received_view, accept_follow_request, decline_follow_request
 
 app_name='posts'
 
@@ -16,6 +17,9 @@ urlpatterns = [
     path('edit_myprofile/', edit_my_profile_view, name='my_profile_view'),
     path('followers_list/', followers_list, name='followers_list'),
     path('profiles_list/',ProfilesList.as_view(), name='profiles_list'),
+    path('follow_requests/', requests_received_view, name='follow_requests'),
+    path('<int:request_id>/accept_request/', accept_follow_request, name='accept_request'),
+    path('<int:request_id>/decline_request/', decline_follow_request, name='decline_request'),
 
 
 
