@@ -37,23 +37,24 @@ class ProfileDetail(DetailView):
     model = Profile
     template_name = 'profiles/profile_details.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     user = Profile.objects.get(email__iexact=self.request.user)
-    #     profile = Profile.objects.get(email=self.request.user)
-    #     flw_r = FollowRequest.objects.filter(follower=profile)
-    #     flw_s = FollowRequest.objects.filter(following=profile)
-    #     rel_receiver = []
-    #     rel_sender = []
-    #     for item in rel_r:
-    #         rel_receiver.append(item.receiver.user)
-    #     for item in rel_s:
-    #         rel_sender.append(item.sender.user)
-    #     context["rel_receiver"] = rel_receiver
-    #     context["rel_sender"] = rel_sender
-    #     context['posts'] = self.get_object().get_all_authors_posts()
-    #     context['len_posts'] = True if len(self.get_object().get_all_authors_posts()) > 0 else False
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.get(email__iexact=self.request.user)
+        sent_request = FollowRequest.objects.filter(follower=profile)
+        received_request = FollowRequest.objects.filter(following=profile)
+        sent_requests = []
+        received_requests = []
+        for item in received_request:
+            received_requests.append(item.follower.email)
+        for item in sent_request:
+            sent_requests.append(item.following.email)
+        context["sent_requests"] = sent_requests
+        context["received_requests"] = received_requests
+        context['is_empty'] = False
+        if len(self.get_queryset()) == 0:
+            context['is_empty'] = True
+
+        return context
 
 
 class ProfilesList(ListView):
@@ -61,6 +62,25 @@ class ProfilesList(ListView):
     template_name = 'profiles/profiles_list.html'
     context_object_name = 'profiles_list'
     paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.get(email__iexact=self.request.user)
+        sent_request = FollowRequest.objects.filter(follower=profile)
+        received_request = FollowRequest.objects.filter(following=profile)
+        sent_requests = []
+        received_requests = []
+        for item in received_request:
+            received_requests.append(item.follower.email)
+        for item in sent_request:
+            sent_requests.append(item.following.email)
+        context["sent_requests"] = sent_requests
+        context["received_requests"] = received_requests
+        context['is_empty'] = False
+        if len(self.get_queryset()) == 0:
+            context['is_empty'] = True
+
+        return context
 
 
 def followings_list(request):
@@ -102,7 +122,7 @@ def followers_list(request):
 
 
 @login_required
-def requests_received_view(request):
+def received_requests_view(request):
     profile = Profile.objects.get(email=request.user)
     qs = FollowRequest.objects.requests_received(profile)
     # results = list(map(lambda x: x.follower, qs))
@@ -119,26 +139,25 @@ def requests_received_view(request):
 
 
 @login_required()
-def send_follow_request(request, user_id):
+def send_follow_request(request, email):
     follower = request.user
-    following = Profile.objects.get(email=user_id)
+    following = Profile.objects.get(email=email)
     follow_request, created = FollowRequest.objects.get_or_create(follower=follower, following=following)
     if created:
         follow_request.status = 'send'
         follow_request.save()
         return HttpResponse("request send")
-    else:
-        return HttpResponse("request was already sent")
 
 
 @login_required()
-def accept_follow_request(request,request_id):
+def accept_follow_request(request, request_id):
     follow_request = FollowRequest.objects.get(id=request_id)
     if request.method == "POST":
         follow_request.following.follower.add(follow_request.follower)
         follow_request.follower.following.add(follow_request.following)
-        follow_request.status = 'accepted'
-        follow_request.save()
+        # follow_request.status = 'accepted'
+        # follow_request.save()
+        follow_request.delete()
         return redirect('posts:follow_requests')
 
 
@@ -150,14 +169,22 @@ def decline_follow_request(request, request_id):
     return redirect('posts:follow_requests')
 
 
-# def reject_invatation(request):
-#     if request.method=="POST":
-#         pk = request.POST.get('profile_pk')
-#         receiver = Profile.objects.get(user=request.user)
-#         sender = Profile.objects.get(pk=pk)
-#         rel = get_object_or_404(Relationship, sender=sender, receiver=receiver)
-#         rel.delete()
-#     return redirect('profiles:my-invites-view')
+def unfollow(request, following_id):
+    profile = Profile.objects.get(email=request.user)
+    if request.method == "POST":
+        following = Profile.objects.get(id=following_id)
+        profile.get_followings.remove(following.email)
+        following.objects.get_followers.remove(profile.email)
+        return HttpResponse('profile unfollowed')
+
+
+def remove_follower(request, follower):
+    profile = Profile.objects.get(email=request.user)
+    if request.method == "POST":
+        follower = Profile.objects.get(email=follower)
+        profile.get_followers.remove(follower.email)
+        follower.objects.get_followings.remove(profile.email)
+        return HttpResponse('profile unfollowed')
 
 # class SearchView(ListView):
 #     model = Profile

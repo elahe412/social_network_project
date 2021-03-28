@@ -14,7 +14,28 @@
     <p>{{ object.website }}</p>
 </div>
 <div>
-
+    {% if object.email != request.user.email %}
+        {% if object not in request.user.get_followings and object.email not in sent_requests %}
+            <form action="{% url 'posts:send_follow_request' object.email %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Follow</button>
+            </form>
+        {% elif object.email in sent_requests %}
+{#            and request.user.email not in object.get_followers #}
+            <button class="ui disabled button mb-5 w-big"><i class="user icon"></i>Requested</button>
+        {% elif object.email in request.user.get_followings %}
+            <form action="{% url 'posts:unfollow' object.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Unfollow</button>
+            </form>
+        {% endif %}
+        {% if object.email in request.user.get_followers %}
+            <form action="{% url 'posts:remove_follower' object.email %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Remove</button>
+            </form>
+        {% endif %}
+    {% endif %}
 </div>
 <hr>
 <div>
