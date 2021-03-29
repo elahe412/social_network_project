@@ -6,20 +6,22 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <title>Autocomplete</title>
+    <title>Search</title>
 </head>
 <body>
-<form>
-    <label for="product">Product</label>
-    <input type="text" name="product" id="product">
+<form method="post">
+    {% csrf_token %}
+    <label for="profile">Username</label>
+    <input type="text" name="profile" id="profile">
+    <button type="submit">Go</button>
 </form>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
     $(function () {
-        $("#product").autocomplete({
-            source: '{% url 'autocomplete' %}',
-            minLength: 2
+        $("#profile").autocomplete({
+            source: '{% url 'posts:search' %}',
+            minLength: 1
         });
     });
 </script>

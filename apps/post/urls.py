@@ -4,7 +4,7 @@ from apps.post import views
 from apps.post.views import like_unlike_post, PostDeleteView, PostUpdateView, post_list_view
 from apps.profiles.views import followings_list, edit_my_profile_view, followers_list, ProfilesList, \
     accept_follow_request, decline_follow_request, received_requests_view, send_follow_request, unfollow, \
-    remove_follower, ProfileDetail
+    remove_follower, ProfileDetail, autocomplete_search
 
 app_name = 'posts'
 
@@ -28,10 +28,9 @@ urlpatterns = [
     path('<int:request_id>/decline_request/', decline_follow_request, name='decline_request'),
     path('<email>/send_follow_request/', send_follow_request, name='send_follow_request'),
     path('<following>/unfollow/', unfollow, name='unfollow'),
-    path('<follower>/remove_follower/', remove_follower, name='remove_follower')
-
+    path('<follower>/remove_follower/', remove_follower, name='remove_follower'),
     # search
-    # path('', autocomplete, name='autocomplete'),
+    path('search/', autocomplete_search, name='search'),
 
 
 ]

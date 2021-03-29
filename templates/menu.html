@@ -15,6 +15,7 @@
                 <li><a href={% url 'profiles:profile-detail-view' request.user.slug %}>my profile</a></li>
                 <li><a href={% url 'posts:profiles_list' %}>profiles list</a></li>
                 <li><a href={% url 'posts:follow_requests' %}>my requests</a></li>
+                <li><a href={% url 'posts:search' %}>search</a></li>
             {% endif %}
         </ul>
     </nav>

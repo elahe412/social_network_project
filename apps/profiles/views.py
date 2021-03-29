@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 
@@ -186,3 +187,19 @@ def remove_follower(request, follower):
         follower.following.remove(profile)
 
         return redirect('profiles:profile-detail-view', follower.slug)
+
+
+def autocomplete_search(request):
+    if request.method == "GET":
+        if 'term' in request.GET:
+            qs = Profile.objects.filter(email__icontains=request.GET.get('term'))
+            emails = list()
+            for profile in qs:
+                emails.append(profile.email)
+            return JsonResponse(emails, safe=False)
+        return render(request, 'profiles/search.html')
+    if request.method == "POST":
+        email = request.POST.get('profile')
+        profile=Profile.objects.get(email=email)
+        return redirect(profile.get_absolute_url())
+
