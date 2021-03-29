@@ -3,7 +3,8 @@ from django.urls import path
 from apps.post import views
 from apps.post.views import like_unlike_post, PostDeleteView, PostUpdateView, post_list_view
 from apps.profiles.views import followings_list, edit_my_profile_view, followers_list, ProfilesList, \
-    accept_follow_request, decline_follow_request, received_requests_view, send_follow_request, unfollow,remove_follower
+    accept_follow_request, decline_follow_request, received_requests_view, send_follow_request, unfollow, \
+    remove_follower, ProfileDetail
 
 app_name = 'posts'
 
@@ -14,6 +15,10 @@ urlpatterns = [
     path('<pk>/update/', PostUpdateView.as_view(), name='post-update'),
     path('<int:pk>/', views.post_detail, name='post-detail-view'),
     path('create_post/', views.create_new_post, name='new_post'),
+
+    # profile urls
+
+    # path('<slug>/', ProfileDetail.as_view(), name='profile-detail-view'),
     path('followings_list/', followings_list, name='followings_list'),
     path('edit_myprofile/', edit_my_profile_view, name='my_profile_view'),
     path('followers_list/', followers_list, name='followers_list'),
@@ -21,13 +26,12 @@ urlpatterns = [
     path('follow_requests/', received_requests_view, name='follow_requests'),
     path('<int:request_id>/accept_request/', accept_follow_request, name='accept_request'),
     path('<int:request_id>/decline_request/', decline_follow_request, name='decline_request'),
-    path('(?P<email>[-a-zA-Z0-9_]+)/send_follow_request/', send_follow_request, name='send_follow_request'),
-    path('<int:follower_id>/unfollow/', unfollow, name='unfollow'),
-    path('(?P<email>[-a-zA-Z0-9_]+)/remove_follower/',remove_follower , name='remove_follower')
+    path('<email>/send_follow_request/', send_follow_request, name='send_follow_request'),
+    path('<following>/unfollow/', unfollow, name='unfollow'),
+    path('<follower>/remove_follower/', remove_follower, name='remove_follower')
 
-    # path('edit_myprofile/', edit_my_profile_view, name='my_profile_view'),
-    # path('edit_myprofile/', ProfileUpdateView.as_view(), name='my_profile_view'),
-    # path('<slug>/edit_myprofile/', ProfileUpdateView.as_view(), name='my_profile_view'),
+    # search
+    # path('', autocomplete, name='autocomplete'),
 
-    # path('<slug>/', ProfileDetail.as_view(), name='profile-detail-view'),
+
 ]

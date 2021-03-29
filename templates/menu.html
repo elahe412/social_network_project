@@ -11,9 +11,10 @@
             {% if request.user.is_authenticated %}
                 <li><a href={% url 'logout' %}>logout</a></li>
                 <li><a href={% url 'posts:new_post' %}>new post</a></li>
-                <li><a href={% url 'profiles:my_profile_view' %}>edit profile</a></li>
+                <li><a href={% url 'posts:my_profile_view' %}>edit profile</a></li>
                 <li><a href={% url 'profiles:profile-detail-view' request.user.slug %}>my profile</a></li>
-                <li><a href={% url 'profiles:profiles_list' %}>profiles list</a></li>
+                <li><a href={% url 'posts:profiles_list' %}>profiles list</a></li>
+                <li><a href={% url 'posts:follow_requests' %}>my requests</a></li>
             {% endif %}
         </ul>
     </nav>

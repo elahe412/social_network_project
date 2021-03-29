@@ -3,8 +3,6 @@
 Profiles List
 {% endblock title %}
 {% block content %}
-    {{ received_requests }}
-{{ sent_requests }}
 {% for profile in profiles_list %}
 <ul>
     <li><a href={{ profile.get_absolute_url }}>{{ profile.email }}</a></li>

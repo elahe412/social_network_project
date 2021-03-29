@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 
@@ -125,7 +124,6 @@ def followers_list(request):
 def received_requests_view(request):
     profile = Profile.objects.get(email=request.user)
     qs = FollowRequest.objects.requests_received(profile)
-    # results = list(map(lambda x: x.follower, qs))
     is_empty = False
     if len(qs) == 0:
         is_empty = True
@@ -141,12 +139,13 @@ def received_requests_view(request):
 @login_required()
 def send_follow_request(request, email):
     follower = request.user
-    following = Profile.objects.get(email=email)
+    following = Profile.objects.get(slug=email)
     follow_request, created = FollowRequest.objects.get_or_create(follower=follower, following=following)
     if created:
         follow_request.status = 'send'
         follow_request.save()
-        return HttpResponse("request send")
+
+        return redirect('profiles:profile-detail-view', email)
 
 
 @login_required()
@@ -169,28 +168,21 @@ def decline_follow_request(request, request_id):
     return redirect('posts:follow_requests')
 
 
-def unfollow(request, following_id):
+def unfollow(request, following):
     profile = Profile.objects.get(email=request.user)
     if request.method == "POST":
-        following = Profile.objects.get(id=following_id)
-        profile.get_followings.remove(following.email)
-        following.objects.get_followers.remove(profile.email)
-        return HttpResponse('profile unfollowed')
+        following = Profile.objects.get(slug=following)
+        profile.following.remove(following)
+        following.follower.remove(profile)
+
+        return redirect('profiles:profile-detail-view', following.slug)
 
 
 def remove_follower(request, follower):
     profile = Profile.objects.get(email=request.user)
     if request.method == "POST":
-        follower = Profile.objects.get(email=follower)
-        profile.get_followers.remove(follower.email)
-        follower.objects.get_followings.remove(profile.email)
-        return HttpResponse('profile unfollowed')
+        follower = Profile.objects.get(slug=follower)
+        profile.follower.remove(follower)
+        follower.following.remove(profile)
 
-# class SearchView(ListView):
-#     model = Profile
-#     template_name = 'profiles/search.html'
-#
-#     def get_queryset(self):
-#         query = self.request.GET.get('q')
-#         object_list = Profile.objects.filter(email__icontains=query)
-#         return object_list
+        return redirect('profiles:profile-detail-view', follower.slug)
