@@ -50,8 +50,7 @@
                             <small>{{ c.created | age }}</small></p>
                             <div class="row">
                                 {% if request.user == obj.author or request.user == c.user %}
-                                    <a href="{% url 'posts:post-update' obj.pk %}"><button class="ui button bwhite-lg">Update</button></a>
-                                    <a href="{% url 'posts:post-delete' obj.pk %}"><button class="ui button bwhite-lg">Delete</button></a>
+                                    <a href="{% url 'posts:comment-delete' c.pk %}"><button class="ui button bwhite-lg">Delete</button></a>
                                 {% endif %}
                             </div>
                         {% endfor %}

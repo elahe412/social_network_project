@@ -94,7 +94,7 @@ def like_unlike_post(request):
 
 class PostDeleteView(DeleteView):
     model = Post
-    template_name = 'post/confirm_del.html'
+    template_name = 'post/confirm_post_del.html'
     success_url = reverse_lazy('posts:main-post-view')
 
     def get_object(self, *args, **kwargs):
@@ -122,14 +122,14 @@ class PostUpdateView(UpdateView):
 
 
 class CommentDelete(DeleteView):
-    template_name = 'post/confirm_del.html'
+    template_name = 'post/confirm_comment_del.html'
     model = Comment
     success_url = reverse_lazy('posts:main-post-view')
 
     def get_object(self, *args, **kwargs):
         pk = self.kwargs.get('pk')
-        obj = Post.objects.get(pk=pk)
-        if not obj.user.email == self.request.user:
+        obj = Comment.objects.get(pk=pk)
+        if not obj.user == self.request.user:
             messages.warning(self.request, 'You need to be the author of the post')
 
         return obj

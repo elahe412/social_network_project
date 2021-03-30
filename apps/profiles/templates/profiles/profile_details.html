@@ -5,16 +5,12 @@
 {% endblock title%}
 
 {% block content %}
-{% if object in request.user.get_followers %}
-    <h1>YES</h1>
-{% endif %}
 <body>
 <div>
     <h1>{{ object.email }}</h1>
     <p>{{ object.get_full_name }}</p>
     <p>{{ object.bio }}</p>
-    <p>{{ object.website }}</p>
-</div>
+    <a href={{ object.website }}> {{ object.website  }}</a>
 <div>
     {% if object.email != request.user.email %}
         {% if object not in request.user.get_followings and object.email not in sent_requests %}
@@ -50,8 +46,8 @@
     </tr>
     <tr>
         <td> {{ object.get_posts_no }}</td>
-        <td><a href={% url 'profiles:followers_list' %}> {{ object.get_followers_no }}</a></td>
-        <td><a href={% url 'profiles:followings_list' %}> {{ object.get_followings_no }}</a></td>
+        <td><a href={% url 'posts:followers_list' %}> {{ object.get_followers_no }}</a></td>
+        <td><a href={% url 'posts:followings_list' %}> {{ object.get_followings_no }}</a></td>
     </tr>
 
 </table>

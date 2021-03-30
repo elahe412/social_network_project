@@ -200,6 +200,11 @@ def autocomplete_search(request):
         return render(request, 'profiles/search.html')
     if request.method == "POST":
         email = request.POST.get('profile')
-        profile=Profile.objects.get(email=email)
-        return redirect(profile.get_absolute_url())
+        if Profile.objects.filter(email=email).exists():
+            profile=Profile.objects.get(email=email)
+            return redirect(profile.get_absolute_url())
+        else:
+            is_exist = False
+            return render(request, 'profiles/search.html',{'is_exist':is_exist,'msg':"profile dose not exist"})
+
 
