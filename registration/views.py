@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -17,31 +18,10 @@ from registration.forms import ProfileCreationForm
 from registration.tokens import account_activation_token
 
 
-# def usersignup(request):
-#     if request.method == 'POST':
-#         form = ProfileCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.is_active = False
-#             user.save()
-#             current_site = get_current_site(request)
-#             email_subject = 'Activate Your Account'
-#             message = render_to_string('registration/activate_account.html', {
-#                 'user': user,
-#                 'domain': current_site.domain,
-#                 'uid': urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
-#                 'token': account_activation_token.make_token(user),
-#             })
-#             to_email = form.cleaned_data.get('email')
-#             email = EmailMessage(email_subject, message, to=[to_email])
-#             email.send()
-#             return HttpResponse('We have sent you an email, please confirm your email address to complete registration')
-#     else:
-#         form = ProfileCreationForm()
-#     return render(request, 'registration/signup.html', {'form': form})
-
 class SignupView(CreateView):
-    """sign up user view"""
+    """
+    sign up user view
+    """
 
     form_class = ProfileCreationForm
     template_name = 'registration/signup.html'
@@ -51,7 +31,8 @@ class SignupView(CreateView):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False  # Deactivate account till it is confirmed
+            # Deactivate account till it is confirmed,user cant login before confirmation
+            user.is_active = False
             user.save()
 
             current_site = get_current_site(request)
@@ -64,7 +45,7 @@ class SignupView(CreateView):
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(
-                    subject, message, to=[to_email]
+                subject, message, to=[to_email]
             )
             email.send()
             return HttpResponse('Please confirm your email address to complete the registration')
@@ -74,9 +55,11 @@ class SignupView(CreateView):
         return render(request, 'registration/signup.html', {'form': form})
 
 
-
-
 class ActivateView(View):
+    """
+    check activation and if profile confirmed login user
+    """
+
     def get(self, request, uidb64, token):
 
         try:
@@ -92,11 +75,14 @@ class ActivateView(View):
         else:
             return HttpResponse('Activation link is invalid!')
 
+
+@login_required()
 def Dashboard(request):
-    """ make dashboard view """
+    """ the first page after login profile will seea """
     return render(request, 'registration/dashboard.html')
 
 
+@login_required()
 def Logout(request):
     """logout logged in user"""
     logout(request)
@@ -106,7 +92,7 @@ def Logout(request):
 class LoginView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            return render(request,'registration/dashboard.html')
+            return render(request, 'registration/dashboard.html')
         else:
             return render(request, 'registration/login.html')
 
@@ -132,7 +118,13 @@ class LoginView(View):
         return render(request, 'registration/login.html', {'message': message})
 
 
+@login_required()
 def change_password(request):
+    """
+    user can change his/her password by PasswordChangeForm
+    :param request
+    :return: render of request, change_password.html and form
+    """
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():

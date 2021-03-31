@@ -7,7 +7,7 @@ app_name = 'profiles'
 
 urlpatterns = [
     path('<slug>/', ProfileDetail.as_view(), name='profile-detail-view'),
-    path('edit_myprofile/', edit_my_profile_view, name='my_profile_view'),
+    path('edit_myprofile/', edit_my_profile_view, name='edit_profile_view'),
     path('followings_list/', followings_list, name='followings_list'),
     path('followers_list/', followers_list, name='followers_list'),
     path('profiles_list/', ProfilesList.as_view(), name='profiles_list'),
@@ -15,7 +15,7 @@ urlpatterns = [
     path('accept_request/', accept_follow_request, name='accept_request'),
     path('decline_request/',  decline_follow_request, name='decline_request'),
 
-    # path('edit_myprofile/', ProfileUpdateView.as_view(), name='my_profile_view'),
+    # path('edit_myprofile/', ProfileUpdateView.as_view(), name='edit_profile_view'),
     # path('send_follow_request/', send_follow_request, 'send_request'),
     # path('accept_follow_request/',accept_follow_request,'accept_request'),
     # path('requests/', TemplateView.as_view(template_name='profiles/follow_requests.html'), name='requests'),

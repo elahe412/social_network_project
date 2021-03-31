@@ -2,6 +2,11 @@ from django.contrib.auth.base_user import BaseUserManager
 
 
 class CustomUserManager(BaseUserManager):
+    """
+    custom user manager that inherit form BaseUserManager
+    will manage the abstract base user for creating user or super user
+    """
+
     def _create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError('The given email must be set')
@@ -19,5 +24,3 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
         return self._create_user(email, password, **extra_fields)
-
-

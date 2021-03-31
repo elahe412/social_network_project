@@ -6,6 +6,10 @@ register = template.Library()
 
 @register.filter(name='age')
 def post_age(publish_date):
+    """
+    :param publish_date: this will be created date of post and comment
+    :return: a string that depends on how long has it been since publish date
+    """
     age = timezone.now() - publish_date
     days, seconds = age.days, age.seconds
     hours = days * 24 + seconds // 3600
