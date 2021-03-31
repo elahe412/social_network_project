@@ -83,8 +83,8 @@ class ProfilesList(ListView):
         return context
 
 
-def followings_list(request):
-    user = Profile.objects.get(email=request.user)
+def followings_list(request,user):
+    user = Profile.objects.get(slug=user)
     followings_list = user.get_followings()
 
     page = request.GET.get('page', 1)
@@ -102,8 +102,8 @@ def followings_list(request):
     return render(request, 'profiles/followings_list.html', context)
 
 
-def followers_list(request):
-    user = Profile.objects.get(email=request.user)
+def followers_list(request,user):
+    user = Profile.objects.get(slug=user)
     followers_list = user.get_followers()
 
     page = request.GET.get('page', 1)

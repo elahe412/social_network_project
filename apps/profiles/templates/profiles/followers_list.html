@@ -9,7 +9,7 @@ following
 
 
 {% for x in followers %}
-    <li>{{ x.email }}</li>
+    <li><a href={{ x.get_absolute_url}}>{{ x.email }}</a></li>
 {% endfor %}
 
 {% if followers.has_other_pages %}

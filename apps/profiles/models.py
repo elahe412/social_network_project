@@ -67,24 +67,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         return self.posts.all().count()
 
     def get_all_authors_posts(self):
+        # if len(self.posts.all()) == 0:
+        #     return "No post yet"
+        # else:
         return self.posts.all()
-
-    # they should be deleted:
-
-    def get_likes_given_no(self):
-        likes = self.like_set.all()
-        total_liked = 0
-        for item in likes:
-            if item.value == 'Like':
-                total_liked += 1
-        return total_liked
-
-    def get_likes_recieved_no(self):
-        posts = self.posts.all()
-        total_liked = 0
-        for item in posts:
-            total_liked += item.liked.all().count()
-        return total_liked
 
 
 class FollowRequestManager(models.Manager):
@@ -97,7 +83,7 @@ class FollowRequest(models.Model):
     following = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="who_follows")
     follower = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="who_is_followed")
     STATUS_CHOICES = (('send', 'send'), ('accepted', 'accepted'))
-    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
+    status = models.CharField (max_length=8, choices=STATUS_CHOICES)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
 

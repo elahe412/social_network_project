@@ -46,28 +46,32 @@
     </tr>
     <tr>
         <td> {{ object.get_posts_no }}</td>
-        <td><a href={% url 'posts:followers_list' %}> {{ object.get_followers_no }}</a></td>
-        <td><a href={% url 'posts:followings_list' %}> {{ object.get_followings_no }}</a></td>
+        {% if request.user in object.get_followers or request.user == object %}
+            <td><a href={% url 'posts:followers_list' object.slug %}> {{ object.get_followers_no }}</a></td>
+            <td><a href={% url 'posts:followings_list' object.slug %}> {{ object.get_followings_no }}</a></td>
+        {% else %}
+            <td>{{ object.get_followers_no }}</td>
+            <td>{{ object.get_followings_no }}</td>
+        {% endif %}
+
     </tr>
 
 </table>
 
 <hr>
-
-<p>followings:</p>
-{% for profile in object.get_followings %}
-    <li><a href={{ profile.get_absolute_url }}> {{ profile }}</a></li>
-{% endfor %}
-
-<p>followers:</p>
-{% for profile in object.get_followers %}
-    <li><a href={{ profile.get_absolute_url }}> {{ profile }}</a></li>
-{% endfor %}
-<hr>
-<p>posts:</p>
-{% for post in object.get_all_authors_posts %}
-    <li><a href={{ post.get_absolute_url }}>{{ post }}</a></li>
-{% endfor %}
+{% if request.user in object.get_followers or request.user == object%}
+    <p>posts:</p>
+    {% if object.get_all_authors_posts.count == 0 %}
+        <p>No post yet</p>
+    {% else %}
+        {% for post in object.get_all_authors_posts %}
+            <li><a href={{ post.get_absolute_url }}>{{ post }}</a></li>
+        {% endfor %}
+    {% endif %}
+{% else %}
+    <p>This account is private</p>
+    <p>Follow this account to see their posts</p>
+{% endif %}
 </div>
 </body>
 {% endblock content %}

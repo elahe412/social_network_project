@@ -20,9 +20,9 @@ urlpatterns = [
     # profile urls
 
     # path('<slug>/', ProfileDetail.as_view(), name='profile-detail-view'),
-    path('followings_list/', followings_list, name='followings_list'),
+    path('<user>/followings_list/', followings_list, name='followings_list'),
     path('edit_myprofile/', edit_my_profile_view, name='my_profile_view'),
-    path('followers_list/', followers_list, name='followers_list'),
+    path('<user>/followers_list/', followers_list, name='followers_list'),
     path('profiles_list/', ProfilesList.as_view(), name='profiles_list'),
     path('follow_requests/', received_requests_view, name='follow_requests'),
     path('<int:request_id>/accept_request/', accept_follow_request, name='accept_request'),

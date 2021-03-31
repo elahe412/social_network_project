@@ -7,7 +7,7 @@ following
 
 <h1>followings:</h1>
 {% for x in followings %}
-    <li>{{ x.email }}</li>
+    <li><a href={{ x.get_absolute_url}}>{{ x.email }}</a></li>
 {% endfor %}
 
 {% if followings.has_other_pages %}
