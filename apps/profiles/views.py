@@ -1,3 +1,6 @@
+import random
+
+# from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -7,13 +10,15 @@ from django.views.generic import DetailView, ListView
 
 from apps.profiles.forms import ProfileModelForm
 from apps.profiles.models import Profile, FollowRequest
+# import http.client
+
 
 
 # class ProfileUpdateView(UpdateView):
 #     form_class = ProfileModelForm
 #     model = Profile
 #     template_name = 'profiles/edit_profile.html'
-#     success_url = reverse_lazy('posts:profile-detail-view')
+#     success_url = reverse_lazy('profiles:profile-detail-view')
 #
 #     def form_valid(self, form):
 #         if form.is_valid():
@@ -73,6 +78,7 @@ class ProfilesList(LoginRequiredMixin, ListView):
     # context name use in html file
     context_object_name = 'profiles_list'
     paginate_by = 3
+
 
 @login_required()
 def followings_list(request, user):
@@ -181,7 +187,7 @@ def accept_follow_request(request, request_id):
         # follow_request.status = 'accepted'
         # follow_request.save()
         follow_request.delete()
-        return redirect('posts:follow_requests')
+        return redirect('profiles:follow_requests')
 
 
 @login_required()
@@ -194,7 +200,7 @@ def decline_follow_request(request, request_id):
     follow_request = FollowRequest.objects.get(id=request_id)
     if request.method == "POST":
         follow_request.delete()
-    return redirect('posts:follow_requests')
+    return redirect('profiles:follow_requests')
 
 
 @login_required()
@@ -256,3 +262,5 @@ def autocomplete_search(request):
         else:
             is_exist = False
             return render(request, 'profiles/search.html', {'is_exist': is_exist, 'msg': "profile dose not exist"})
+
+

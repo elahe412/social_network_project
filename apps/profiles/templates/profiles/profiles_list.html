@@ -6,8 +6,6 @@ Profiles List
 {% for profile in profiles_list %}
 <ul>
     <li><a href={{ profile.get_absolute_url }}>{{ profile.email }}</a></li>
-
-
 </ul>
 
 {% endfor %}

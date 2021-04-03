@@ -75,13 +75,6 @@ class ActivateView(View):
         else:
             return HttpResponse('Activation link is invalid!')
 
-
-@login_required()
-def Dashboard(request):
-    """ the first page after login profile will seea """
-    return render(request, 'registration/dashboard.html')
-
-
 @login_required()
 def Logout(request):
     """logout logged in user"""
@@ -92,7 +85,7 @@ def Logout(request):
 class LoginView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            return render(request, 'registration/dashboard.html')
+            return redirect('posts:main-post-view')
         else:
             return render(request, 'registration/login.html')
 
@@ -107,7 +100,7 @@ class LoginView(View):
                 if user.is_active:
                     message = 'Login was successful!'
                     login(request, user)
-                    return redirect('dashboard')
+                    return redirect('posts:main-post-view')
                 else:
                     message = 'User is deactivated!'
             else:

@@ -14,7 +14,7 @@
 <div>
     {% if object.email != request.user.email %}
         {% if object not in request.user.get_followings and object.email not in sent_requests %}
-            <form action="{% url 'posts:send_follow_request' object.slug %}" method="POST">
+            <form action="{% url 'profiles:send_follow_request' object.slug %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Follow</button>
             </form>
@@ -23,13 +23,13 @@
             <button class="ui disabled button mb-5 w-big"><i class="user icon"></i>Requested</button>
         {% endif %}
         {% if object in request.user.get_followings %}
-            <form action="{% url 'posts:unfollow' object.slug %}" method="POST">
+            <form action="{% url 'profiles:unfollow' object.slug %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Unfollow</button>
             </form>
         {% endif %}
         {% if object in request.user.get_followers %}
-            <form action="{% url 'posts:remove_follower' object.slug %}" method="POST">
+            <form action="{% url 'profiles:remove_follower' object.slug %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Remove</button>
             </form>
@@ -47,8 +47,8 @@
     <tr>
         <td> {{ object.get_posts_no }}</td>
         {% if request.user in object.get_followers or request.user == object %}
-            <td><a href={% url 'posts:followers_list' object.slug %}> {{ object.get_followers_no }}</a></td>
-            <td><a href={% url 'posts:followings_list' object.slug %}> {{ object.get_followings_no }}</a></td>
+            <td><a href={% url 'profiles:followers_list' object.slug %}> {{ object.get_followers_no }}</a></td>
+            <td><a href={% url 'profiles:followings_list' object.slug %}> {{ object.get_followings_no }}</a></td>
         {% else %}
             <td>{{ object.get_followers_no }}</td>
             <td>{{ object.get_followings_no }}</td>

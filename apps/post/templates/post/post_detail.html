@@ -10,14 +10,14 @@
             <div class="eleven wide column">
                 <div class="ui fluid card">
                     <div class="row">
-                        {% ifequal request.user post.author.user %}
-                            <a href="{% url 'posts:post-update' Post.pk %}">
+                        {% if request.user == post.author %}
+                            <a href="{% url 'posts:post-update' post.pk %}">
                                 <button class="ui button bwhite-lg">Update</button>
                             </a>
-                            <a href="{% url 'posts:post-delete' Post.pk %}">
+                            <a href="{% url 'posts:post-delete' post.pk %}">
                                 <button class="ui button bwhite-lg">Delete</button>
                             </a>
-                        {% endifequal %}
+                        {% endif %}
                         <a href="{{ post.author.profile.get_absolute_url }}"><img
                                 src="{{ post.author.profile.image.url }}" class="rounded-circle" width="30" height="30"
                                 alt=""></a>
@@ -33,9 +33,9 @@
                             <input type="hidden" name="post_id" value="{{ post.id }}">
                             <button type="submit" class="ui primary button">
                                 {% if profile not in post.liked.all %}
-                                    <i class="thumbs up icon"></i>&nbsp;Like
+                                    <i class="heart outline icon"></i>&nbsp;Like
                                 {% else %}
-                                    <i class="thumbs down icon"></i>&nbsp;Unlike
+                                    <i class="heart icon"></i>&nbsp;Unlike
                                 {% endif %}
                             </button>
                             &nbsp;{{ post.num_likes }} <small>likes</small>
@@ -44,6 +44,7 @@
                     <div>
                         {% if post.comment_set.all %}
                             {% for c in post.comment_set.all %}
+                                <div {% if forloop.counter > 9 %} class="d-none" {% endif %} >
                                 <p><a href={{ c.user.get_absolute_url }}> {{ c.user }}</a> : {{ c.body }}
                                     <br>
                                     <small>{{ c.created|age }}</small></p>
@@ -55,7 +56,9 @@
 
                                     {% endif %}
                                 </div>
+                                </div>
                             {% endfor %}
+
                         {% endif %}
                     </div>
 

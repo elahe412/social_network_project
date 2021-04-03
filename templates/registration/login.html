@@ -13,12 +13,7 @@
     <button type="submit">Login</button>
     <p>{{ message }}</p>
 </form>
-<div>
-    <a href="">Login with Email</a>
-</div>
-<div>
-    <a href="">Login with SMS</a>
-</div>
+<a href="{% url 'password_reset' %}">Forgot Password</a>
 <div>
     <p>Dont have an account?
     <a href={% url 'signup' %}>SignUp</a></p>

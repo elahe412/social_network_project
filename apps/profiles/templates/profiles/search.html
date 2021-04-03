@@ -27,7 +27,7 @@
 <script>
     $(function () {
         $("#profile").autocomplete({
-            source: '{% url 'posts:search' %}',
+            source: '{% url 'profiles:search' %}',
             minLength: 1
         });
     });

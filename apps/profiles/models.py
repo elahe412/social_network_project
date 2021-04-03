@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import User, AbstractUser, PermissionsMixin
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import models
 from django.urls import reverse
 from django_extensions.db.fields import AutoSlugField
@@ -9,6 +10,8 @@ from apps.profiles.managers import CustomUserManager
 
 class Profile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=False)
+    # mobile = models.CharField(max_length=20)
+    # otp = models.CharField(max_length=6)
 
     # this fields are optional in editing profile
     first_name = models.CharField(max_length=200, blank=True)
@@ -82,7 +85,9 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         """
         :return: list of profile's posts
         """
+        # paginator = Paginator(self.posts.all(), 2)
 
+        # return paginator
         return self.posts.all()
 
 
