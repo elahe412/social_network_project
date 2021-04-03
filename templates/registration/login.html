@@ -1,27 +1,67 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Title</title>#}
+{#</head>#}
+{#<body>#}
+{#<form method="post">#}
+{##}
+{#    {% csrf_token %}#}
+{#    Email: <input name="username" type="text"></br>#}
+{#    Password: <input name="password" type="password"></br>#}
+{#    <button type="submit">Login</button>#}
+{#    <p>{{ message }}</p>#}
+{#</form>#}
+{#<div>#}
+{#    <a href="">Login with Email</a>#}
+{#</div>#}
+{#<div>#}
+{#    <a href="">Login with SMS</a>#}
+{#</div>#}
+{#<div>#}
+{#    <p>Dont have an account?#}
+{#    <a href={% url 'signup' %}>SignUp</a></p>#}
+{#</div>#}
+{#</body>#}
+{#</html>#}
+
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    {#    <meta charset="UTF-8">#}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>Login</title>
 </head>
 <body>
-<form method="post">
+<div class="container">
+    <h2 style="margin:1em 14em 0.5em;font-style: italic; padding:0.5em;width:400px;position: relative"><b>Social
+        Network</b></h2>
+    <form method="post">
 
-    {% csrf_token %}
-    Email: <input name="username" type="text"></br>
-    Password: <input name="password" type="password"></br>
-    <button type="submit">Login</button>
-    <p>{{ message }}</p>
-</form>
-<div>
-    <a href="">Login with Email</a>
-</div>
-<div>
-    <a href="">Login with SMS</a>
-</div>
-<div>
-    <p>Dont have an account?
-    <a href={% url 'signup' %}>SignUp</a></p>
+        {% csrf_token %}
+        Email: <input name="username" type="text"></br>
+        Password: <input name="password" type="password"></br>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <p>{{ message }}</p>
+{#        <button type="submit">Login</button>#}
+{#        <p>{{ message }}</p>#}
+    </form>
+
+    <div>
+
+<a href="{% url 'password_reset' %}">Forgot Password</a>
+        <p style="margin-top:2em">Dont have an account?
+            <br>
+            <a href={% url 'signup' %}>
+                <button type="submit" class="btn btn-primary" style="color: #ffffff">SignUp</button>
+            </a>
+    </div>
 </div>
 </body>
 </html>

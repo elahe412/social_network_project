@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
 from apps.post import views
 from apps.post.views import like_unlike_post, PostDeleteView, PostUpdateView, post_list_view, CommentDelete
@@ -30,8 +31,8 @@ urlpatterns = [
     path('<email>/send_follow_request/', send_follow_request, name='send_follow_request'),
     path('<following>/unfollow/', unfollow, name='unfollow'),
     path('<follower>/remove_follower/', remove_follower, name='remove_follower'),
-    # search
     path('search/', autocomplete_search, name='search'),
+    path('setting/', TemplateView.as_view(template_name="profiles/setting.html"), name='setting'),
 
 
 ]

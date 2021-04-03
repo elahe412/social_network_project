@@ -1,28 +1,42 @@
 {% extends 'base.html' %}
 
-{% block title %} follow requests {% endblock title%}
+{% block title %} follow requests {% endblock title %}
 
-{% block content%}
+{% block content %}
+<h2 style="font-family: 'Bitstream Vera Sans'"> Your requests:</h2>
+    {% if is_empty %}
+        <p style="font-size: 18px; margin-left: 1em">No request</p>
+    {% endif %}
 
-{% if is_empty %}
-    <h1>No requests</h1>
-{% endif %}
-{% for request in requests %}
-        <h1>Your requests:</h1>
-    <li><a href={{ request.follower.get_absolute_url }}>{{ request.follower.email }}</a></li>
-    <form action="{% url 'posts:accept_request' request.id %}" method="POST">
-    {% csrf_token %}
-    <button type="submit" class="ui positive basic button w-big mb-5">
-        <i class="check icon"></i>
-        Accept
-    </button>
-    </form>
-    <form action="{% url 'posts:decline_request' request.id %}" method="POST">
-    {% csrf_token %}
-    <button type="submit" class="ui negative basic button w-big mb-5">
-        <i class="close icon"></i>
-        Decline
-    </button>
-    </form>
+    {% for request in requests %}
+        <li style="margin-top: 2em"><a href={{ request.follower.get_absolute_url }}>{{ request.follower.email }}</a></li>
+        <div class="row">
+            <form action="{% url 'posts:accept_request' request.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="ui positive basic button  mb-4">
+                    <i class="check icon"></i>
+                    Accept
+                </button>
+            </form>
+
+            <form action="{% url 'posts:decline_request' request.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="ui negative basic button  mb-4">
+                    <i class="close icon"></i>
+                    Decline
+                </button>
+            </form>
+
+        </div>
+        <hr>
+    {% endfor %}
+<h3>recents:</h3>
+{% if sent_requests.count == 0 %}
+<h5>no recent requests</h5>
+{% else %}
+{% for req in sent_requests %}
+<li>{{ req.following }} accepted your request</li>
 {% endfor %}
+{% endif %}
+</div>
 {% endblock content %}

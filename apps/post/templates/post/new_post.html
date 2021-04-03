@@ -1,3 +1,25 @@
+{#{% extends 'base.html' %}#}
+{##}
+{#{% block title %}#}
+{#    create post#}
+{#{% endblock title %}#}
+{##}
+{#{% block content %}#}
+{##}
+{#        <div class="five wide column">#}
+{#            {% if post_added %}#}
+{#                <div class="ui green message">Post added</div>#}
+{#            {% endif %}#}
+{#            <form action="" method="POST" class="ui form" enctype="multipart/form-data">#}
+{#                {% csrf_token %}#}
+{#                {{ p_form }}#}
+{#                <button type="submit" class="ui button positive"name="submit_p_form">Send Post</button>#}
+{#            </form>#}
+{#        </div>#}
+{##}
+{##}
+{#{% endblock content %}#}
+
 {% extends 'base.html' %}
 
 {% block title %}
@@ -10,10 +32,10 @@
             {% if post_added %}
                 <div class="ui green message">Post added</div>
             {% endif %}
-            <form action="" method="POST" class="ui form" enctype="multipart/form-data">
+            <form action="" method="POST" class="ui form" enctype="multipart/form-data" style="margin-left: 2em; width: 1200px">
                 {% csrf_token %}
                 {{ p_form }}
-                <button type="submit" class="ui button positive"name="submit_p_form">Send Post</button>
+                <button type="submit" class="ui button positive"name="submit_p_form" style="margin-top: 1.5em; margin-left: 1em">Send Post</button>
             </form>
         </div>
 

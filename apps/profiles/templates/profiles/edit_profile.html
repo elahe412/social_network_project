@@ -1,20 +1,54 @@
-{% extends 'base.html' %}
+{#{% extends 'base.html' %}#}
+{##}
+{#{% block title %}#}
+{#my profile#}
+{#{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#{{ obj.email }}#}
+{#<hr>#}
+{#{% if confirm %}#}
+{#<div class="ui green message">Your profile has been updated</div>#}
+{#{% endif %}#}
+{#<form action="" method="POST" class="ui form" enctype="multipart/form-data">#}
+{#{% csrf_token %}#}
+{#{{ form.as_p }}<br>#}
+{#<button type="submit">Edit Profile</button>#}
+{#</form>#}
+{#<a href={% url 'change_password' %}>change password</a>#}
+{##}
+{#{% endblock content %}#}
+{############################################################################3#}
 
+{% extends 'base.html' %}
+{% load static %}
 {% block title %}
-my profile
+    my profile
 {% endblock %}
 
 {% block content %}
-{{ obj.email }}
-<hr>
-{% if confirm %}
-<div class="ui green message">Your profile has been updated</div>
-{% endif %}
-<form action="" method="POST" class="ui form" enctype="multipart/form-data">
-{% csrf_token %}
-{{ form.as_p }}<br>
-<button type="submit">Edit Profile</button>
-</form>
-<a href={% url 'change_password' %}>change password</a>
+    <div class="container">
+
+        <div style="margin-top: 1em">
+            <p style=" margin-top:1.5em; font-size: 18px;">Your email: <b>{{ obj.email }}</b></p>
+            <button type="button" class="btn btn-success" style="position: relative; left: 65em"><a
+                    href='{% url 'change_password' %}' style="color: white">change
+                password</a></button>
+        </div>
+        <hr>
+        {% if confirm %}
+            <div class="ui green message">Your profile has been updated</div>
+        {% endif %}
+        <form action="" method="POST" class="ui form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}<br>
+            <button type="submit" class="btn btn-primary" style="margin-bottom: 1em">Edit Profile</button>
+        </form>
+        {#        <div style="margin-top: 1em">#}
+        {#            <button type="button" class="btn btn-success" style="margin-bottom: 2em"><a href='{% url 'change_password' %}' style="color: white">change#}
+        {#                password</a></button>#}
+        {#        </div>#}
+    </div>
+
 
 {% endblock content %}

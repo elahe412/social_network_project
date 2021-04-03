@@ -1,36 +1,107 @@
 {% extends 'base.html' %}
 {% block title %}
-following
+    followers
 {% endblock title %}
 
 {% block content %}
+    <h2 style="font-family: 'Bitstream Vera Sans'; margin-top: 2em">followers:</h2>
+    <div class="container" style="margin-top: 1.5em">
+        {% for x in followers %}
+            <div class="d-flex justify-content-between">
+                <a href={{ x.get_absolute_url }}>{{ x.email }}</a>
+                {% if x.email != request.user.email %}
+{#                    <ul>#}
+{#                    <li><p>x:{{ x }}</p></li>#}
+{#                    <li><p>x.email:{{ x.email }}</p></li>#}
+{#                    <li><p>request.user.get_followings:{{ request.user.get_followings }}</p></li>#}
+{#                    <li><p>sent_requests:{{sent_requests }}</p></li></ul>#}
+{#                    <li><p>x.slug:{{x.slug }}</p></li></ul>#}
+                    {% if x not in request.user.get_followings and x.email not in sent_requests %}
+                        <form action="{% url 'posts:send_follow_request' x.slug %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="ui positive basic button mb-5 w-big "><i
+                                    class="plus square icon"></i>Follow
+                            </button>
+                        </form>
+                    {% elif x.email in sent_requests %}
+                        {#            and request.user.email not in object.get_followers#}
+                        <button class="ui disabled button mb-5 w-big"><i class="user icon"></i>Requested</button>
+                    {% endif %}
+                    {#                {% if x in request.user.get_followings %}#}
+                    {#                    <form action="{% url 'posts:unfollow' x.slug %}" method="POST">#}
+                    {#                        {% csrf_token %}#}
+                    {#                        <button type="submit" class="btn btn-outline-secondary"><i class="minus square icon"></i>Unfollow#}
+                    {#                        </button>#}
+                    {#                    </form>#}
+                    {#                {% endif %}#}
+                    {% if x in request.user.get_followers %}
+                        <form action="{% url 'posts:remove_follower' x.slug %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="ui negative basic button  mb-5 w-big"><i
+                                    class="minus square icon"></i>Remove
+                            </button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <hr style="margin-top: 0">
+        {% endfor %}
 
-<h1>followers:</h1>
+    </div>
 
+    <div style="margin-top: 2em">
+        {% if is_paginated %}
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                {% endif %}
+                {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <li class="page-item active"><span class="page-link">{{ i }} <span
+                                class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class=" page-item disabled"><span class="page-link">Next</span></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+    {#<h1>followers:</h1>#}
+    {##}
+    {##}
+    {#{% for x in followers %}#}
+    {#    <li><a href={{ x.get_absolute_url}}>{{ x.email }}</a></li>#}
+    {#{% endfor %}#}
 
-{% for x in followers %}
-    <li><a href={{ x.get_absolute_url}}>{{ x.email }}</a></li>
-{% endfor %}
-
-{% if followers.has_other_pages %}
-  <ul class="pagination">
-    {% if followers.has_previous %}
-      <li><a href="?page={{ followers.previous_page_number }}">&laquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in followers.paginator.page_range %}
-      {% if followers.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-      {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% if followers.has_next %}
-      <li><a href="?page={{ followers.next_page_number }}">&raquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-  </ul>
-{% endif %}
+    {#{% if followers.has_other_pages %}#}
+    {#  <ul class="pagination">#}
+    {#    {% if followers.has_previous %}#}
+    {#      <li><a href="?page={{ followers.previous_page_number }}">&laquo;</a></li>#}
+    {#    {% else %}#}
+    {#      <li class="disabled"><span>&laquo;</span></li>#}
+    {#    {% endif %}#}
+    {#    {% for i in followers.paginator.page_range %}#}
+    {#      {% if followers.number == i %}#}
+    {#        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>#}
+    {#      {% else %}#}
+    {#        <li><a href="?page={{ i }}">{{ i }}</a></li>#}
+    {#      {% endif %}#}
+    {#    {% endfor %}#}
+    {#    {% if followers.has_next %}#}
+    {#      <li><a href="?page={{ followers.next_page_number }}">&raquo;</a></li>#}
+    {#    {% else %}#}
+    {#      <li class="disabled"><span>&raquo;</span></li>#}
+    {#    {% endif %}#}
+    {#  </ul>#}
+    {#{% endif %}#}
 {% endblock content %}

@@ -1,24 +1,141 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title></title>#}
+{#</head>#}
+{#<body>#}
+{#<header>#}
+{#    <nav style="background: rebeccapurple;color: black">#}
+{#        <ul>#}
+{#            {% if request.user.is_authenticated %}#}
+{#                <li><a href={% url 'logout' %}>logout</a></li>#}
+{#                <li><a href={% url 'posts:new_post' %}>new post</a></li>#}
+{#                <li><a href={% url 'posts:my_profile_view' %}>edit profile</a></li>#}
+{#                <li><a href={% url 'profiles:profile-detail-view' request.user.slug %}>my profile</a></li>#}
+{#                <li><a href={% url 'posts:profiles_list' %}>profiles list</a></li>#}
+{#                <li><a href={% url 'posts:follow_requests' %}>my requests</a></li>#}
+{#                <li><a href={% url 'posts:search' %}>search</a></li>#}
+{#            {% endif %}#}
+{#        </ul>#}
+{#    </nav>#}
+{#</header>#}
+{#</body>#}
+{#</html>#}
+
+{###################################################################################}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title></title>
 </head>
-<body>
+{% load post_custom_tags %}
+{% load static %}
+<body style="background-color: #f5f0f5">
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 <header>
-    <nav style="background: rebeccapurple;color: black">
-        <ul>
-            {% if request.user.is_authenticated %}
-                <li><a href={% url 'logout' %}>logout</a></li>
-                <li><a href={% url 'posts:new_post' %}>new post</a></li>
-                <li><a href={% url 'posts:my_profile_view' %}>edit profile</a></li>
-                <li><a href={% url 'profiles:profile-detail-view' request.user.slug %}>my profile</a></li>
-                <li><a href={% url 'posts:profiles_list' %}>profiles list</a></li>
-                <li><a href={% url 'posts:follow_requests' %}>my requests</a></li>
-                <li><a href={% url 'posts:search' %}>search</a></li>
-            {% endif %}
-        </ul>
+    {#    <div style="background: #6902a1;color: #ffffff">#}
+    {#        <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">#}
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav" style="justify-content: space-between;font-size: 15px">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item" style="position: relative; margin-right: 3em">
+                        <a class="nav-link" style="font-size: 13px"
+                           href={% url 'profiles:profile-detail-view' request.user.slug %} data-toggle="tooltip"
+                           data-placement="top" title="my profile">
+                            {#                            <img src="../icons_pic/profile-website.svg" style="margin-right: 1em">#}
+                            <i style="color: #d5cfcf"><b>{{ request.user.email }}</b> profile</i>
+                        </a>
+                    </li>
+                    <li class="nav-item" style="position: relative; margin-right: 3em">
+                        <a class="nav-link" href={% url 'posts:main-post-view' %} data-toggle="tooltip"
+                           data-placement="top" title="contacts posts">
+                            {#                            <img src="{% static "icons_pic/profile-website.svg" %}" style="margin-right: 1em">contacts posts#}
+                            {#                                <button class="btn btn-outline-secondary">#}
+{#                            <button class="ui inverted white button">#}
+                                <i style="color: #d5cfcf">Home</i>
+{#                            </button>#}
+                        </a>
+                    </li>
+                    <li class="nav-item" style="position: relative; margin-right: 3em">
+                        <a class="nav-link" href={% url 'posts:new_post' %} data-toggle="tooltip" data-placement="top"
+                           title="new post">
+                            {#                               <img src="../icons_pic/screenshot.svg" style="margin-right: 1em">new post#}
+                            {#                            <button class="ui inverted white button">#}
+                            <i style="color: #d5cfcf">New post</i>
+                            {#                            </button>#}
+                        </a>
+                    </li>
+                    <li class="nav-item" style="position: relative; margin-right: 3em">
+                        <a class="nav-link" href={% url 'posts:search' %} data-toggle="tooltip" data-placement="top"
+                           title="search">
+                            {#                               <img src="../icons_pic/screenshot.svg" style="margin-right: 1em">search#}
+                            {#                            <button class="ui inverted white button">#}
+                            <i style="color: #d5cfcf">Search</i>
+                            {#                            </button>#}
+                        </a>
+                    </li>
+                    <li class="nav-item" style="position: relative; margin-right: 3em">
+                        {#                        <p style="color: white">{{ request.requests}}hello</p>#}
+                        <a class="nav-link" href={% url 'posts:follow_requests' %} data-toggle="tooltip"
+                           data-placement="top"
+                           title="my requests">
+                            {#                                <img src="../icons_pic/screenshot.svg" style="margin-right: 1em">my requests#}
+                            {#                                <button class="ui inverted white button">#}
+                            <i style="color: #d5cfcf">My requests</i>
+                            <span class="badge badge-light"
+                                  style="margin-left: 0.5em"> {{ request.user|counting }} </span>
+                            {#                            </button>#}
+                            {#                            {% for x in FollowRequest.objects.all %}#}
+                            {#                                {% if x.following == request.user and x.status == "send" %}#}
+                            {#                                    <span class="badge badge-light" style="margin-left: 0.5em">{{ x.count }}</span>#}
+                            {#                                {% endif %}#}
+                            {#                            {% endfor %}#}
+                        </a>
+                    </li>
+                    <li class="nav-item" style="position: relative; margin-right: 3em">
+                        <a class="nav-link" href={% url 'posts:profiles_list' %} data-toggle="tooltip"
+                           data-placement="top"
+                           title="profiles list">
+                            {#                             <img src="../icons_pic/screenshot.svg" style="margin-right: 1em">profiles list#}
+{#                            <button class="ui inverted white button">#}
+                                <i style="color: #d5cfcf">Profiles list</i>
+{#                            </button>#}
+                        </a>
+                    </li>
+
+                    {#                    <li class="nav-item" style="position: relative; margin-right: 3em">#}
+                    {#                        <a class="nav-link" href={% url 'posts:my_profile_view' %} data-toggle="tooltip"#}
+                    {#                           data-placement="top"#}
+                    {#                           title="edit profile"><img src="../icons_pic/profile-website.svg" style="margin-right: 1em">edit profile#}
+                    {#                        </a>#}
+                    {#                    </li>#}
+                    {#                    <li class="nav-item" style="position: relative; margin-right: 3em">#}
+                    {#                        <a class="nav-link" href={% url 'logout' %} data-toggle="tooltip" data-placement="top"#}
+                    {#                           title="logout!"><img#}
+                    {#                                src="../icons_pic/logout-line.svg" style="margin-right: 1em">logout#}
+                    {#                        </a>#}
+                    {#                    </li>#}
+                {% endif %}
+            </ul>
+        </div>
     </nav>
+
 </header>
 </body>
 </html>

@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 
+from apps.post.models import Post
 from apps.profiles.forms import ProfileModelForm
 from apps.profiles.models import Profile, FollowRequest
 
@@ -81,7 +82,23 @@ class ProfilesList(ListView):
             context['is_empty'] = True
 
         return context
-
+    def autocomplete_search(request):
+        if request.method == "GET":
+            if 'term' in request.GET:
+                qs = Profile.objects.filter(email__icontains=request.GET.get('term'))
+                emails = list()
+                for profile in qs:
+                    emails.append(profile.email)
+                return JsonResponse(emails, safe=False)
+            return render(request, 'profiles/profiles_list.html')
+        if request.method == "POST":
+            email = request.POST.get('profile')
+            if Profile.objects.filter(email=email).exists():
+                profile=Profile.objects.get(email=email)
+                return redirect(profile.get_absolute_url())
+            else:
+                is_exist = False
+                return render(request, 'profiles/profiles_list.html',{'is_exist':is_exist,'msg':"profile dose not exist"})
 
 def followings_list(request,user):
     user = Profile.objects.get(slug=user)
@@ -109,6 +126,20 @@ def followers_list(request,user):
     page = request.GET.get('page', 1)
     paginator = Paginator(followers_list, 2)
 
+    ######################
+    # context = super().get_context_data(**kwargs)
+    profile = Profile.objects.get(email__iexact=request.user)
+    sent_request = FollowRequest.objects.filter(follower=profile)
+    received_request = FollowRequest.objects.filter(following=profile)
+    sent_requests = []
+    received_requests = []
+    for item in received_request:
+        received_requests.append(item.follower.email)
+    for item in sent_request:
+        sent_requests.append(item.following.email)
+
+
+    # return context
     try:
         followers = paginator.page(page)
     except PageNotAnInteger:
@@ -116,8 +147,10 @@ def followers_list(request,user):
     except EmptyPage:
         followers = paginator.page(paginator.num_pages)
 
-    context = {'followers': followers}
-
+    context = {'followers': followers, "sent_requests":sent_requests,"received_requests": received_requests}
+    # context['is_empty'] = False
+    # if len(self.get_queryset()) == 0:
+    #     context['is_empty'] = True
     return render(request, 'profiles/followers_list.html', context)
 
 
@@ -128,8 +161,11 @@ def received_requests_view(request):
     is_empty = False
     if len(qs) == 0:
         is_empty = True
+    sent_requests = FollowRequest.objects.filter(follower=profile.id).filter(status='accepted').order_by(
+            '-updated')[:2]
 
     context = {
+        'sent_requests': sent_requests,
         'requests': qs,
         'is_empty': is_empty,
     }
@@ -175,7 +211,6 @@ def unfollow(request, following):
         following = Profile.objects.get(slug=following)
         profile.following.remove(following)
         following.follower.remove(profile)
-
         return redirect('profiles:profile-detail-view', following.slug)
 
 
@@ -206,5 +241,6 @@ def autocomplete_search(request):
         else:
             is_exist = False
             return render(request, 'profiles/search.html',{'is_exist':is_exist,'msg':"profile dose not exist"})
+
 
 

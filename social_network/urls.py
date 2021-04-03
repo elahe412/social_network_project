@@ -16,22 +16,44 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
-
-from registration.views import LoginView, Dashboard, Logout, change_password, SignupView,ActivateView
+from django.urls import path, include, reverse_lazy
+from django.contrib.auth import views as auth_views
+from registration.views import LoginView,Logout, change_password, SignupView,ActivateView
 
 urlpatterns = [
     path('', LoginView.as_view(), name='login'),
     path('signup/', SignupView.as_view(), name='signup'),
     path('activate/<uidb64>/<token>/',ActivateView.as_view(), name='activate'),
-    # path('singup/', usersignup, name='signup'),
-    # path('activate/',activate_account, name='activate'),
     path('change_password/', change_password, name='change_password'),
-    path('home/', Dashboard, name='dashboard'),
     path('logout/', Logout, name='logout'),
     path('admin/', admin.site.urls),
     path('profiles/', include('apps.profiles.urls', namespace='profiles')),
     path('posts/', include('apps.post.urls', namespace='posts')),
+    # Forget Password
+
+    path('password-reset/',
+         auth_views.PasswordResetView.as_view(
+             template_name='registration/password_reset.html',
+             subject_template_name='registration/password_reset_subject.txt',
+             email_template_name='registration/password_reset_email.html',
+             success_url=reverse_lazy('password_reset_done')
+         ),
+         name='password_reset'),
+    path('password-reset/done/',
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='registration/password_reset_done.html'
+         ),
+         name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+             template_name='registration/password_reset_confirm.html'
+         ),
+         name='password_reset_confirm'),
+    path('password-reset-complete/',
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='registration/password_reset_complete.html'
+         ),
+         name='password_reset_complete'),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

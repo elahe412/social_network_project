@@ -1,33 +1,125 @@
+{#{% extends 'base.html' %}#}
+{#{% load post_custom_tags %}#}
+{#{% block title %}#}
+{#    {{ request.user }}'s post#}
+{#{% endblock title %}#}
+{##}
+{#{% block content %}#}
+{#    <div class="ui grid">#}
+{#        <div class="row">#}
+{#            <div class="eleven wide column">#}
+{#                <div class="ui fluid card">#}
+{#                    <div class="row">#}
+{#                        {% ifequal request.user post.author.user %}#}
+{#                            <a href="{% url 'posts:post-update' Post.pk %}">#}
+{#                                <button class="ui button bwhite-lg">Update</button>#}
+{#                            </a>#}
+{#                            <a href="{% url 'posts:post-delete' Post.pk %}">#}
+{#                                <button class="ui button bwhite-lg">Delete</button>#}
+{#                            </a>#}
+{#                        {% endifequal %}#}
+{#                        <a href="{{ post.author.profile.get_absolute_url }}"><img#}
+{#                                src="{{ post.author.profile.image.url }}" class="rounded-circle" width="30" height="30"#}
+{#                                alt=""></a>#}
+{#                        <a class="text-dark"#}
+{#                           href="{{ post.author.profile.get_absolute_url }}"><b>{{ post.author }}</b></a>#}
+{#                        <p class="card-text text-dark"> {{ post.content }}</p>#}
+{#                        <small class="text-muted">Posted on: {{ post.created|age }}</small>#}
+{#                    </div>#}
+{#                    <hr>#}
+{#                    <div class="content">#}
+{#                        <form action="" method="post">#}
+{#                            {% csrf_token %}#}
+{#                            <input type="hidden" name="post_id" value="{{ post.id }}">#}
+{#                            <button type="submit" class="ui primary button">#}
+{#                                {% if profile not in post.liked.all %}#}
+{#                                    <i class="thumbs up icon"></i>&nbsp;Like#}
+{#                                {% else %}#}
+{#                                    <i class="thumbs down icon"></i>&nbsp;Unlike#}
+{#                                {% endif %}#}
+{#                            </button>#}
+{#                            &nbsp;{{ post.num_likes }} <small>likes</small>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                    <div>#}
+{#                        {% if post.comment_set.all %}#}
+{#                            {% for c in post.comment_set.all %}#}
+{#                                <p><a href={{ c.user.get_absolute_url }}> {{ c.user }}</a> : {{ c.body }}#}
+{#                                    <br>#}
+{#                                    <small>{{ c.created|age }}</small></p>#}
+{#                                <div class="row">#}
+{#                                    {% if request.user == post.author.user or request.user == c.user %}#}
+{#                                        <a href="{% url 'posts:comment-delete' c.pk %}">#}
+{#                                            <button class="ui button bwhite-lg">Delete</button>#}
+{#                                        </a>#}
+{##}
+{#                                    {% endif %}#}
+{#                                </div>#}
+{#                            {% endfor %}#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{##}
+{#                    <form action="" method="POST" class="ui form">#}
+{#                        {% csrf_token %}#}
+{##}
+{#                        <input type="hidden" name="post_id" value={{ post.id }}>#}
+{#                        {{ c_form }}#}
+{#                        <button type="submit" class="ui primary button" name="submit_c_form">comment</button>#}
+{#                        {{ post.num_comments }} <small>comments</small>#}
+{#                    </form>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{#    </div>#}
+{##}
+{#{% endblock content %}#}
+
+
 {% extends 'base.html' %}
 {% load post_custom_tags %}
 {% block title %}
-    {{ request.user }}'s post
+    <p><a href="{{ request.user }}"></a>'s post</p>
 {% endblock title %}
 
 {% block content %}
-    <div class="ui grid">
+    <div class="container" style="margin-top: 1em">
         <div class="row">
-            <div class="eleven wide column">
-                <div class="ui fluid card">
-                    <div class="row">
-                        {% ifequal request.user post.author.user %}
-                            <a href="{% url 'posts:post-update' Post.pk %}">
-                                <button class="ui button bwhite-lg">Update</button>
+            <div class="container border">
+                <div class="ui fluid">
+                    <div class="row" style="margin-left: 1em">
+                        {% if request.user == post.author %}
+                            <a href="{% url 'posts:post-update' post.pk %}">
+                                <button type="button" class="btn btn-info">Update</button>
                             </a>
-                            <a href="{% url 'posts:post-delete' Post.pk %}">
-                                <button class="ui button bwhite-lg">Delete</button>
+                            <a href="{% url 'posts:post-delete' post.pk %}">
+                                <button type="button" class="btn btn-danger">Delete</button>
                             </a>
-                        {% endifequal %}
-                        <a href="{{ post.author.profile.get_absolute_url }}"><img
-                                src="{{ post.author.profile.image.url }}" class="rounded-circle" width="30" height="30"
-                                alt=""></a>
-                        <a class="text-dark"
-                           href="{{ post.author.profile.get_absolute_url }}"><b>{{ post.author }}</b></a>
-                        <p class="card-text text-dark"> {{ post.content }}</p>
-                        <small class="text-muted">Posted on: {{ post.created|age }}</small>
+
+                        {% endif %}
                     </div>
-                    <hr>
+                    <hr style="margin-top: 0">
                     <div class="content">
+                        <img src="{{ post.author.avatar.url }}" class="rounded-circle" style="width:45px; height: 40px; margin-bottom: 1em">
+                        <a href='{{ post.author.get_absolute_url }}' style=" font-size: 15px; position: relative; left: 0.7em; top:-0.4em;text-decoration: none;color: black"><b style="font-style: italic">{{ post.author }}</b></a>
+                        <div class="ui fluid image">
+                            {% if post.image %}
+                                <img src="{{ post.image.url }}" class="rounded" style="width:100%;">
+                            {% endif %}
+                            <small style="margin-left: 8px">{{ post.created|age }}</small>
+                        </div>
+
+                    </div>
+
+                    <div class="container p-3 my-3 border">
+                        <p style=" font-size: 15px">
+                            <a href='{{ post.author.get_absolute_url }}'
+                               style=" font-size: 15px;text-decoration:none; color: black"><b>{{ post.author }}</b>:</a> {{ post.content }}
+                        </p>
+                    </div>
+
+                    <div class="container p-3 my-3 border">
                         <form action="" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="post_id" value="{{ post.id }}">
@@ -41,37 +133,45 @@
                             &nbsp;{{ post.num_likes }} <small>likes</small>
                         </form>
                     </div>
-                    <div>
+                    <div class="container p-3 my-3 border">
+                        <p>{{ post.num_comments }} <b style="font-size: 15px;">Comments:</b></p>
                         {% if post.comment_set.all %}
                             {% for c in post.comment_set.all %}
-                                <p><a href={{ c.user.get_absolute_url }}> {{ c.user }}</a> : {{ c.body }}
+                                <p style="font-size: 13px"><a href='{{ c.user.get_absolute_url }}' style="text-decoration:none; color: black;"><b>{{ c.user }}</b></a> : {{ c.body }}</p>
                                     <br>
-                                    <small>{{ c.created|age }}</small></p>
-                                <div class="row">
-                                    {% if request.user == post.author.user or request.user == c.user %}
-                                        <a href="{% url 'posts:comment-delete' c.pk %}">
-                                            <button class="ui button bwhite-lg">Delete</button>
-                                        </a>
 
+                                <div class="row">
+                                    <small style="margin-left: 1.5em; margin-top: 0.5em">{{ post.created|age }}</small>
+                                    {#                                <p>{{ request.user }}</p>#}
+                                    {#                                <p>{{ post.author }}</p>#}
+                                    {#                                <p>{{ c.user }}</p>#}
+                                    {% if request.user == c.user %}
+                                        <a href="{% url 'posts:comment-delete' c.pk %}">
+                                            <button type="button" class="btn btn-danger" style="margin-left: 1em;">
+                                                Delete
+                                            </button>
+                                        </a>
                                     {% endif %}
                                 </div>
                             {% endfor %}
                         {% endif %}
                     </div>
 
-                    <form action="" method="POST" class="ui form">
+                    <form action="" method="POST" class="ui form container">
                         {% csrf_token %}
 
                         <input type="hidden" name="post_id" value={{ post.id }}>
                         {{ c_form }}
-                        <button type="submit" class="ui primary button" name="submit_c_form">comment</button>
-                        {{ post.num_comments }} <small>comments</small>
+                        <button type="submit" class="ui primary button" name="submit_c_form"
+                                style="margin-bottom: 1em">
+                            comment
+                        </button>
                     </form>
+
                 </div>
+
             </div>
 
         </div>
-
     </div>
-
 {% endblock content %}

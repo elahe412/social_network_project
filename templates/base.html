@@ -1,34 +1,115 @@
 {% load static %}
 <!doctype html>
-<html rulang="en">
-  <head>
+<html lang="en">
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <!--Custom css ADD HERE-->
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {#  new#}
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- semantic UI -->
-    <link rel="stylesheet" type='text/css' href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+    <link rel="stylesheet" type='text/css'
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 
-  
+
     <title>{% block title %}{% endblock title %}</title>
-  </head>
-  <body>
-  {% include 'menu.html' %}
-    <div class="ui container">
-      {% block content %}
-      {% endblock content %}
-    </div>
+    <!-- sidebar -->
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+        }
 
-    {% block scripts %}
-    {% endblock scripts %}
-   
-   <!--Custom js ADD HERE-->
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
 
-  </body>
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 15px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 12px;
+            margin-left: 50px;
+        }
+
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+            .sidenav a {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+{% include 'menu.html' %}
+<div class="ui container" style="background-color: #f5f0f5;padding: 0;width: 100%;">
+    {% block content %}
+        {#                <div style="background-color: #f5f0f5; margin-right: 2em">#}
+    {% endblock content %}
+</div>
+
+{% block scripts %}
+{% endblock scripts %}
+<div>
+    {% block random_profiles %}
+
+    {% endblock random_profiles %}
+</div>
+<div>
+    {% block new_post %}
+
+    {% endblock new_post %}
+</div>
+<div>
+    {% block setting %}
+
+    {% endblock setting %}
+</div>
+
+
+<!--Custom js ADD HERE-->
+
+</body>
 </html>

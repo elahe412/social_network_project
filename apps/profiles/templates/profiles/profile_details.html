@@ -1,78 +1,150 @@
 {% extends 'base.html' %}
-{% block title%}
-
-{{ object.email }} profile
-{% endblock title%}
-
+{% load post_custom_tags %}
 {% block content %}
-<body>
-<div>
-    <h1>{{ object.email }}</h1>
-    <p>{{ object.get_full_name }}</p>
-    <p>{{ object.bio }}</p>
-    <a href={{ object.website }}> {{ object.website  }}</a>
-<div>
-    {% if object.email != request.user.email %}
-        {% if object not in request.user.get_followings and object.email not in sent_requests %}
-            <form action="{% url 'posts:send_follow_request' object.slug %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Follow</button>
-            </form>
-        {% elif object.email in sent_requests %}
-{#            and request.user.email not in object.get_followers #}
-            <button class="ui disabled button mb-5 w-big"><i class="user icon"></i>Requested</button>
-        {% endif %}
-        {% if object in request.user.get_followings %}
-            <form action="{% url 'posts:unfollow' object.slug %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Unfollow</button>
-            </form>
-        {% endif %}
-        {% if object in request.user.get_followers %}
-            <form action="{% url 'posts:remove_follower' object.slug %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Remove</button>
-            </form>
-        {% endif %}
-    {% endif %}
-</div>
-<hr>
-<div>
-<table>
-    <tr>
-        <th>posts</th>
-        <th>followers</th>
-        <th>followings</th>
-    </tr>
-    <tr>
-        <td> {{ object.get_posts_no }}</td>
-        {% if request.user in object.get_followers or request.user == object %}
-            <td><a href={% url 'posts:followers_list' object.slug %}> {{ object.get_followers_no }}</a></td>
-            <td><a href={% url 'posts:followings_list' object.slug %}> {{ object.get_followings_no }}</a></td>
-        {% else %}
-            <td>{{ object.get_followers_no }}</td>
-            <td>{{ object.get_followings_no }}</td>
-        {% endif %}
+    <head>
+        <title>{{ object.email }} profile</title>
+    </head>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a class="nav-link" href={% url 'posts:follow_requests' %}>My requests
+            <span class="badge badge-light" style="margin-left: 0.5em"> {{ request.user|counting }} </span></a>
+        <a href='{% url 'posts:new_post' %}' style="text-decoration: none;"> New post</a>
+        <a href='{% url 'posts:setting' %}' style="text-decoration: none;"> Setting</a>
+        <a href='{% url 'logout' %}' style="text-decoration: none"> Logout</a>
+        <a style="color: white">Suggestions</a>
+        <a href="" style="text-decoration: none;">  {% random_profiles request.user %}</a>
 
-    </tr>
+    </div>
+    <div id="main">
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
 
-</table>
 
-<hr>
-{% if request.user in object.get_followers or request.user == object%}
-    <p>posts:</p>
-    {% if object.get_all_authors_posts.count == 0 %}
-        <p>No post yet</p>
-    {% else %}
-        {% for post in object.get_all_authors_posts %}
-            <li><a href={{ post.get_absolute_url }}>{{ post }}</a></li>
-        {% endfor %}
-    {% endif %}
-{% else %}
-    <p>This account is private</p>
-    <p>Follow this account to see their posts</p>
-{% endif %}
-</div>
-</body>
+        <body>
+        <div style="margin-top:1em; background-color: #f5f0f5">
+
+            <div class="card"
+                 style="margin-top: 1em;position: relative;left: 3.5em;width: 1200px; background-color: #f9f5ff">
+                <h4 class="card-title" style="margin-left: 0.5em; margin-top: 0.3em;"><img src="{{ object.avatar.url }}"
+                                                                                           class="mr-3 rounded-circle"
+                                                                                           style="width:75px; height: 70px;">
+                    <b>{{ object.email }}</b>
+                </h4>
+                <div class="dropdown clearfix">
+                    {% if request.user == object %}
+                        <div class="float-md-right" style="margin-right: 1em; margin-left: 2em">
+                            <button type="button" class="btn btn-primary"><a
+                                    href='{% url 'posts:setting' %}'
+                                    style="color: white;text-decoration: none;">setting</a></button>
+                        </div>
+                        {#                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">#}
+                        {#                        Setting#}
+                        {#                    </button>#}
+                        {##}
+                        {#                    </button>#}
+                        {#                    <div class="dropdown-menu">#}
+                        {#                        <a class="dropdown-item" href='{% url 'posts:my_profile_view' %}'> Edit profile</a>#}
+                        {#                        <a class="dropdown-item" href='{% url 'logout' %}'> Logout</a>#}
+                        {#                    </div>#}
+                    {% endif %}
+                </div>
+                <p class="card-text" style="font-style: italic; font-size: 20px;margin-left: 1em">
+                    <b>{{ object.get_full_name }}</b></p>
+                <small style="font-size: 12px; color: darkblue;margin-left: 2em"><b>Bio:</b></small>
+                <p class="card-text" style="font-size: 15px;margin-left: 1.5em">{{ object.bio }}</p>
+                <a href="{{ object.website }}" class="card-link" style="margin-left: 1.5em">{{ object.website }}</a>
+            </div>
+        </div>
+        {#    <hr>#}
+        <div class="row container" style="margin-left: 6em; margin-top: 1em">
+            {% if object.email != request.user.email %}
+                {% if object not in request.user.get_followings and object.email not in sent_requests %}
+                    <form action="{% url 'posts:send_follow_request' object.slug %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="ui positive basic button mb-5 w-big"><i
+                                class="plus square icon"></i>Follow
+                        </button>
+                    </form>
+                {% elif object.email in sent_requests %}
+                    {#            and request.user.email not in object.get_followers#}
+                    <button class="ui disabled button mb-5 w-big"><i class="user icon"></i>Requested</button>
+                {% endif %}
+                {% if object in request.user.get_followings %}
+                    <form action="{% url 'posts:unfollow' object.slug %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary"><i class="minus square icon"></i>Unfollow
+                        </button>
+                    </form>
+                {% endif %}
+                {% if object in request.user.get_followers %}
+                    <form action="{% url 'posts:remove_follower' object.slug %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="ui negative basic button  mb-5 w-big"><i
+                                class="minus square icon"></i>Remove
+                        </button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+        {#    </div>#}
+        <div class="container">
+            <ul class="nav justify-content-center border"
+                style="margin-top: 1.5em; margin-bottom:1em;background-color: #eae3d0">
+                <li class="nav-item" style="margin-right: 4em"><b>posts</b> <br><br>
+                    <p style="position: relative; left: 1.1em">{{ object.get_posts_no }}</p></li>
+                <li class="nav-item" style="margin-right: 4em"><b>followers</b> <br><br> <a
+                        href='{% url 'posts:followers_list' object.slug %}'
+                        style="cursor: pointer; position: relative; left: 1.5em; text-decoration: none;color: black">{{ object.get_followers_no }}</a>
+                </li>
+                <li class="nav-item" style="margin-right: 4em"><b>followings</b> <br><br> <a
+                        href='{% url 'posts:followings_list' object.slug %}'
+                        style="cursor: pointer;position: relative; left: 2em;text-decoration: none;color: black">{{ object.get_followings_no }}</a>
+                </li>
+            </ul>
+            {#        <hr>#}
+            <div class="container" style="background-color: #f5f0f5">
+                {% if  request.user in object.get_followers or request.user == object %}
+                    <h3 style=" margin-top: 1em"><b style="font-family: Verdana;color: black">Posts:</b></h3>
+                        {% if object.get_all_authors_posts.count == 0 %}
+                            <p>No post yet</p>
+                        {% else %}
+                    <div class="row">
+                        {% for post in object.get_all_authors_posts %}
+
+
+                            <div class="container p-3 my-3 border">
+                                <div class="ui fluid image container">
+                                    <a href={% url 'posts:post-detail-view' post.pk %}><img src="{{ post.image.url }}"
+                                                                                            class="rounded"
+                                                                                            style="width:100%;">
+                                    </a>
+                                    <small style="margin-left: 8px">{{ post.created|age }}</small>
+                                </div>
+                                <li class="container p-3 my-3 border">{{ post }}</li>
+
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+                {% else %}
+                    <p >
+                        <b style="position: relative; left: 22em;top:3em; font-size: 18px">This account is private<br>
+                        Follow this account to see their posts</b></p>
+                {% endif %}
+            </div>
+        </div>
+
+        </body>
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+
 {% endblock content %}
-

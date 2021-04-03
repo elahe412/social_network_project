@@ -1,105 +1,151 @@
 {% extends 'base.html' %}
 {% load post_custom_tags %}
 
-
 {% block title %}
     posts
 {% endblock title %}
 
 {% block content %}
-<div class="ui grid">
-    <div class="row">
-        <div class="eleven wide column">
-            {% for obj in posts %}
-                {% if obj.author in request.user.get_followings or obj.author == request.user %}
-                <div class="ui fluid card">
-                    <div class="row">
-                        {% ifequal request.user obj.author %}
-                            <a href="{% url 'posts:post-update' obj.pk %}"><button class="ui button bwhite-lg">Update</button></a>
-                            <a href="{% url 'posts:post-delete' obj.pk %}"><button class="ui button bwhite-lg">Delete</button></a>
-                        {% endifequal %}
-                    </div>
-                    <div class="content">
-                        <a href={{ obj.author.get_absolute_url }}>{{ obj.author }}</a>
-                        <p>{{ obj.content }}</p>
-                        <div class="ui fluid image">
-                            {% if obj.image %}
-                                <img src={{obj.image.url}}>
-                            {% endif %}
-                    </div>
-                    <small>{{ obj.created|age }}</small>
-                    </div>
-                    <div class="content">
-                        <form action="{% url 'posts:like-post-view' %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="post_id" value="{{ obj.id}}">
-                            <button type="submit" class="ui primary button">
-                                {% if profile not in obj.liked.all %}
-                                    <i class="thumbs up icon"></i>&nbsp;Like
-                                {% else %}
-                                    <i class="thumbs down icon"></i>&nbsp;Unlike
-                                {% endif %}
-                            </button>
-                            &nbsp;{{ obj.num_likes }}
-                        </form>
-                    </div>
-                    <div>
-                    {% if obj.comment_set.all %}
-                        {% for c in obj.comment_set.all %}
-                            <p><a href={{ c.user.get_absolute_url }}>{{ c.user }}</a> : {{ c.body }}<br>
-                            <small>{{ c.created | age }}</small></p>
-                            <div class="row">
-                                {% if request.user == obj.author or request.user == c.user %}
-                                    <a href="{% url 'posts:comment-delete' c.pk %}"><button class="ui button bwhite-lg">Delete</button></a>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    </div>
-                    <form action="" method="POST" class="ui form">
-                        {% csrf_token %}
-                        <input type="hidden" name="post_id" value={{ obj.id }}>
-                        {{ c_form }}
-                        <button type="submit" class="ui primary button" name="submit_c_form">comment</button>
-                        {{ obj.num_comments }}
-                    </form>
-                </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-{#        <div class="five wide column">#}
-{#            {% if post_added %}#}
-{#                <div class="ui green message">Post added</div>#}
-{#            {% endif %}#}
-{#            <form action="" method="POST" class="ui form" enctype="multipart/form-data">#}
-{#                {% csrf_token %}#}
-{#                {{ p_form }}#}
-{#                <button type="submit" class="ui button positive"name="submit_p_form">Send Post</button>#}
-{#            </form>#}
-{#        </div>#}
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href='{% url 'profiles:profile-detail-view' request.user.slug %}' style="text-decoration: none;"><b>{{ request.user.email }}</b> profile</a>
+        <a href='{% url 'posts:new_post' %}'style="text-decoration: none;"> new post</a>
+        <a href='{% url 'posts:setting' %}' style="text-decoration: none;"> setting</a>
+        <a style="color: white">Suggestions</a>
+        <a href="" style="text-decoration: none;">  {% random_profiles request.user %}</a>
+
     </div>
+    <div id="main">
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+        <div class="ui grid" style=" position: relative; left:15em;margin-top: 1em">
+            <div class="row" style="background-color: #f5f0f5">
+                <div class="eleven wide column" style="background-color: #f5f0f5">
+                    {% for obj in posts %}
+                        {% if obj.author in request.user.get_followings or obj.author == request.user %}
+                            <div class="ui fluid card" style="background-color: #f5f0f5">
+                                <div class="row" style="margin-left: 1em">
+                                    {% ifequal request.user obj.author %}
+                                        <a href="{% url 'posts:post-update' obj.pk %}">
+                                            <button type="button" class="btn btn-info">Update</button>
+                                        </a>
+                                        <a href="{% url 'posts:post-delete' obj.pk %}">
+                                            <button type="button" class="btn btn-danger">Delete</button>
+                                        </a>
+                                    {% endifequal %}
+                                </div>
+                                <div class="content">
+                                    <p><img src="{{ obj.author.avatar.url }}" class="mr rounded-circle"
+                                            style="width:43px; height: 40px; margin-bottom: 1em"><a
+                                            href='{{ obj.author.get_absolute_url }}'
+                                            style=" font-size: 16px; position: relative; left: 0.7em; top: -0.4em;text-decoration:none; color: black"><b
+                                            style="font-style: italic">{{ obj.author }}</b></a></p>
+                                    <div class="ui fluid image">
+                                        {% if obj.image %}
+                                            <img src="{{ obj.image.url }}" style="width:100%;">
+                                        {% endif %}
+                                    </div>
+                                    <small>{{ obj.created|age }}</small>
+                                    <div class="container p-3 my-3 border">
+                                        <p style="font-size: 15px; position: relative;"><a
+                                                href='{{ obj.author.get_absolute_url }}'
+                                                style="text-decoration:none; color: black"><b>{{ obj.author }}</b>:</a> {{ obj.content }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="container p-3 my-3 border">
+                                    <form action="{% url 'posts:like-post-view' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="post_id" value="{{ obj.id }}">
+                                        <button type="submit" class="ui primary button">
+                                            {% if profile not in obj.liked.all %}
+                                                <i class="heart outline icon"></i>&nbsp;Like
+                                            {% else %}
+                                                <i class="heart icon"></i>&nbsp;Unlike
+                                            {% endif %}
+                                        </button>
+                                        &nbsp;<small>{{ obj.num_likes }} likes</small>
+                                    </form>
+                                </div>
 
-</div>
-    {% if posts.has_other_pages %}
-  <ul class="pagination">
-    {% if posts.has_previous %}
-      <li><a href="?page={{ posts.previous_page_number }}">&laquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in posts.paginator.page_range %}
-      {% if posts.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-      {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% if posts.has_next %}
-      <li><a href="?page={{ posts.next_page_number }}">&raquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-  </ul>
-{% endif %}
+                                <div style="margin-left: 0.5em">
+                                    <p>{{ obj.num_comments }} <b style="font-size: 15px;">Comments:</b>
+                                    </p>
+                                    {% if obj.comment_set.all %}
+                                        {% for c in obj.comment_set.all %}
+                                            <p style="font-size: 13px"><a href='{{ c.user.get_absolute_url }}'
+                                                                          style="text-decoration:none; color: black;"><b>{{ c.user }}</b></a>
+                                                : {{ c.body }}<br>
+                                            </p>
+                                            <div class="row" style="margin-left: 0.5em">
+                                                <small style="margin-top: 0.8em; margin-right: 0.5em">{{ c.created | age }}</small>
+                                                {% if request.user == obj.author or request.user == c.user %}
+                                                    <a href="{% url 'posts:comment-delete' c.pk %}">
+                                                        <button type="button" class="btn btn-light">
+                                                            <small>Delete</small>
+                                                        </button>
+                                                    </a>
 
+                                                {% endif %}
+
+                                            </div>
+                                            <br>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                                <form action="" method="POST" class="ui form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_id" value={{ obj.id }}>
+                                    {{ c_form }}
+                                    <button type="submit" class="ui primary button" name="submit_c_form"
+                                            style="margin-bottom: 1em">comment
+                                    </button>
+
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+        <div style="margin-top: 2em">
+            {% if posts.has_other_pages %}
+                <ul class="pagination">
+                    {% if posts.has_previous %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="?page={{ posts.previous_page_number }}">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    {% endif %}
+                    {% for i in posts.paginator.page_range %}
+                        {% if posts.number == i %}
+                            <li class="page-item active"><span class="page-link">{{ i }} <span
+                                    class="sr-only">(current)</span></span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if posts.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class=" page-item disabled"><span class="page-link">Next</span></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
 {% endblock content %}

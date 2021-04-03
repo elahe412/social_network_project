@@ -1,8 +1,6 @@
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
-from django_extensions.mongodb.fields import AutoSlugField
-
 from apps.profiles.models import Profile
 
 
@@ -13,7 +11,6 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='posts')
-
 
     def get_absolute_url(self):
         return reverse("posts:post-detail-view", kwargs={"pk": self.id})
