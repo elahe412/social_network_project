@@ -1,4 +1,5 @@
 {% load static %}
+{% load profile_tags %}
 <!doctype html>
 <html rulang="en">
   <head>
@@ -30,5 +31,17 @@
    
    <!--Custom js ADD HERE-->
 
+  <div>
+      {% block random_profiles %}
+      {% endblock random_profiles %}
+  </div>
+  <div>
+      {% block  new_post%}
+      {% endblock new_post %}
+  </div>
+  <div>
+      {% block setting%}
+      {% endblock setting %}
+  </div>
   </body>
 </html>

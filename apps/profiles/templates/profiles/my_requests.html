@@ -25,4 +25,14 @@
     </button>
     </form>
 {% endfor %}
+<div>
+<h3>recents:</h3>
+{% if sent_requests.count == 0 %}
+<h5>no recent requests</h5>
+{% else %}
+{% for req in sent_requests %}
+<li>{{ req.following }} accepted your request</li>
+{% endfor %}
+{% endif %}
+</div>
 {% endblock content %}

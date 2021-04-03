@@ -52,8 +52,8 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profile = Profile.objects.get(email__iexact=self.request.user)
-        sent_request = FollowRequest.objects.filter(follower=profile)
-        received_request = FollowRequest.objects.filter(following=profile)
+        sent_request = FollowRequest.objects.filter(follower=profile).filter(status='send')
+        received_request = FollowRequest.objects.filter(following=profile).filter(status='send')
         sent_requests = []
         received_requests = []
         for item in received_request:
@@ -145,7 +145,13 @@ def received_requests_view(request):
     if len(qs) == 0:
         is_empty = True
 
+    sent_requests=FollowRequest.objects.filter(follower=profile.id).filter(status='accepted').order_by('-updated')[:2]
+
+
+
+
     context = {
+        'sent_requests':sent_requests,
         'requests': qs,
         'is_empty': is_empty,
     }
@@ -184,9 +190,9 @@ def accept_follow_request(request, request_id):
     if request.method == "POST":
         follow_request.following.follower.add(follow_request.follower)
         follow_request.follower.following.add(follow_request.following)
-        # follow_request.status = 'accepted'
-        # follow_request.save()
-        follow_request.delete()
+        follow_request.status = 'accepted'
+        follow_request.save()
+        # follow_request.delete()
         return redirect('profiles:follow_requests')
 
 

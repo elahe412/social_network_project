@@ -111,3 +111,5 @@ class FollowRequest(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     objects = FollowRequestManager()
+
+

@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 {% load post_custom_tags %}
+{% load profile_tags %}
 
 
 {% block title %}
     posts
 {% endblock title %}
 
+{#{% block random_profiles %}#}
+{#        {% random_profiles request.user %}#}
+{#{% endblock random_profiles %}#}
+{#{% block new_post %}#}
+{#<a href={% url 'posts:new_post' %}>creat new post</a>#}
+{#{% endblock new_post %}#}
 {% block content %}
 <div class="ui grid">
     <div class="row">

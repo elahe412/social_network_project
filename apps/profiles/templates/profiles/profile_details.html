@@ -19,7 +19,6 @@
                 <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Follow</button>
             </form>
         {% elif object.email in sent_requests %}
-{#            and request.user.email not in object.get_followers #}
             <button class="ui disabled button mb-5 w-big"><i class="user icon"></i>Requested</button>
         {% endif %}
         {% if object in request.user.get_followings %}
