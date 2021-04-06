@@ -8,7 +8,7 @@
         <a href='{% url 'profiles:profile-detail-view' request.user.slug %}'
            style="text-decoration: none;"><b>{{ request.user.email }}</b> profile</a>
         <a href='{% url 'posts:new_post' %}' style="text-decoration: none;"> new post</a>
-        <a href='{% url 'posts:setting' %}' style="text-decoration: none;"> setting</a>
+        <a href='{% url 'profiles:setting' %}' style="text-decoration: none;"> setting</a>
         <a style="color: white">Suggestions</a>
         <a href="" style="text-decoration: none;">  {% random_profiles request.user %}</a>
 
@@ -23,15 +23,13 @@
                 <input for="email" type="text" class="form-control" placeholder="Search" name="profile" id="profile">
                 <button type="submit" class="btn btn-primary" style="margin-top: 1em">Search</button>
             </div>
-            {#        <label for="profile">Username</label>#}
-            {#        <input type="text" name="profile" id="profile">#}
-            {#        <button type="submit">Go</button>#}
+
         </form>
 
         {% if is_exist == False %}
             {{ msg }}
         {% endif %}
-        {#    </body>#}
+
         {#    sidebar script#}
     </div>
     <script>
@@ -51,7 +49,7 @@
     <script>
         $(function () {
             $("#profile").autocomplete({
-                source: '{% url 'posts:search' %}',
+                source: '{% url 'profiles:search' %}',
                 minLength: 1
             });
         });

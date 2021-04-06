@@ -11,7 +11,7 @@
     {% for request in requests %}
         <li style="margin-top: 2em"><a href={{ request.follower.get_absolute_url }}>{{ request.follower.email }}</a></li>
         <div class="row">
-            <form action="{% url 'posts:accept_request' request.id %}" method="POST">
+            <form action="{% url 'profiles:accept_request' request.id %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" class="ui positive basic button  mb-4">
                     <i class="check icon"></i>
@@ -19,7 +19,7 @@
                 </button>
             </form>
 
-            <form action="{% url 'posts:decline_request' request.id %}" method="POST">
+            <form action="{% url 'profiles:decline_request' request.id %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" class="ui negative basic button  mb-4">
                     <i class="close icon"></i>

@@ -10,7 +10,7 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href='{% url 'profiles:profile-detail-view' request.user.slug %}' style="text-decoration: none;"><b>{{ request.user.email }}</b> profile</a>
         <a href='{% url 'posts:new_post' %}'style="text-decoration: none;"> new post</a>
-        <a href='{% url 'posts:setting' %}' style="text-decoration: none;"> setting</a>
+        <a href='{% url 'profiles:setting' %}' style="text-decoration: none;"> setting</a>
         <a style="color: white">Suggestions</a>
         <a href="" style="text-decoration: none;">  {% random_profiles request.user %}</a>
 

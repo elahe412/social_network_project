@@ -10,11 +10,9 @@
         {% for x in followings %}
             <div class="d-flex justify-content-between">
                 <a href={{ x.get_absolute_url }}>{{ x.email }}</a>
-
-{#            <p>{{  }}</p>#}
                 {% if x.email != request.user.email %}
                     {% if x not in request.user.get_followings and x.email not in sent_requests %}
-                        <form action="{% url 'posts:send_follow_request' x.slug %}" method="POST">
+                        <form action="{% url 'profiles:send_follow_request' x.slug %}" method="POST">
                             {% csrf_token %}
                             <button type="submit" class="ui positive basic button mb-5 w-big"><i
                                     class="plus square icon"></i>Follow
@@ -25,47 +23,19 @@
                         <button class="ui disabled button mb-5 w-big"><i class="user icon"></i>Requested</button>
                     {% endif %}
                     {% if x in request.user.get_followings %}
-                        <form action="{% url 'posts:unfollow' x.slug %}" method="POST">
+                        <form action="{% url 'profiles:unfollow' x.slug %}" method="POST">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-outline-secondary"><i class="minus square icon"></i>Unfollow
                             </button>
                         </form>
                     {% endif %}
-                    {#                {% if x in request.user.get_followers %}#}
-                    {#                    <form action="{% url 'posts:remove_follower' x.slug %}" method="POST">#}
-                    {#                        {% csrf_token %}#}
-                    {#                        <button type="submit" class="ui negative basic button  mb-5 w-big"><i#}
-                    {#                                class="minus square icon"></i>Remove#}
-                    {#                        </button>#}
-                    {#                    </form>#}
-                    {#                {% endif %}#}
+
                 {% endif %}
             </div>
             <hr>
         {% endfor %}
 
     </div>
-    {#    {% if followings.has_other_pages %}#}
-    {#        <ul class="pagination">#}
-    {#            {% if followings.has_previous %}#}
-    {#                <li><a href="?page={{ followings.previous_page_number }}">&laquo;</a></li>#}
-    {#            {% else %}#}
-    {#                <li class="disabled"><span>&laquo;</span></li>#}
-    {#            {% endif %}#}
-    {#            {% for i in followings.paginator.page_range %}#}
-    {#                {% if followings.number == i %}#}
-    {#                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>#}
-    {#                {% else %}#}
-    {#                    <li><a href="?page={{ i }}">{{ i }}</a></li>#}
-    {#                {% endif %}#}
-    {#            {% endfor %}#}
-    {#            {% if followings.has_next %}#}
-    {#                <li><a href="?page={{ followings.next_page_number }}">&raquo;</a></li>#}
-    {#            {% else %}#}
-    {#                <li class="disabled"><span>&raquo;</span></li>#}
-    {#            {% endif %}#}
-    {#        </ul>#}
-    {#    {% endif %}#}
 
     <div style="margin-top: 2em">
         {% if is_paginated %}

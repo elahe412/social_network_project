@@ -3,42 +3,13 @@
 {% block title %}
     Profiles List
 {% endblock title %}
-{#{% block content %}#}
-{#    <form method="post">#}
-{#        <div class="container" style="margin-top: 3em">#}
-{#            {% csrf_token %}#}
-{#            <label for="email">Username:</label>#}
-{#            <input for="email" type="text" class="form-control" placeholder="Search" name="profile" id="profile">#}
-{#            <button type="submit" class="btn btn-primary" style="margin-top: 1em">Search</button>#}
-{#        </div>#}
-{#        <label for="profile">Username</label>#}
-{#        <input type="text" name="profile" id="profile">#}
-{#        <button type="submit">Go</button>#}
-{#    </form>#}
-{##}
-{#    {% if is_exist == False %}#}
-{#        {{ msg }}#}
-{#    {% endif %}#}
-{##}
-{#    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>#}
-{#    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>#}
-{#    <script>#}
-{#        $(function () {#}
-{#            $("#profile").autocomplete({#}
-{#                source: '{% url 'posts:search' %}',#}
-{#                minLength: 1#}
-{#            });#}
-{#        });#}
-{#    </script>#}
-
-{#    ############################################33#}
 {% block content %}
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href='{% url 'profiles:profile-detail-view' request.user.slug %}'
            style="text-decoration: none;"><b>{{ request.user.email }}</b> profile</a>
         <a href='{% url 'posts:new_post' %}' style="text-decoration: none;"> new post</a>
-        <a href='{% url 'posts:setting' %}' style="text-decoration: none;"> setting</a>
+        <a href='{% url 'profiles:setting' %}' style="text-decoration: none;"> setting</a>
         <a style="color: white">Suggestions</a>
         <a href="" style="text-decoration: none;">  {% random_profiles request.user %}</a>
 
@@ -80,16 +51,6 @@
             });
         });
     </script>
-    {#        <div class="container" style="margin-top: 1.5em">#}
-    {#            {% for profile in profiles_list %}#}
-    {#                <ul class="list-group list-group-flush">#}
-    {#                    <a class="list-group-item" href={{ profile.get_absolute_url }}>{{ profile.email }}</a>#}
-    {#                    <hr>#}
-    {##}
-    {#                </ul>#}
-    {##}
-    {#            {% endfor %}#}
-    {#        </div>#}
     <div style="margin-top: 2em">
         {% if is_paginated %}
             <ul class="pagination">
@@ -118,24 +79,4 @@
         {% endif %}
     </div>
 {% endblock content %}
-{#{% if is_paginated %}#}
-{#    <ul class="pagination">#}
-{#    {% if page_obj.has_previous %}#}
-{#      <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>#}
-{#    {% else %}#}
-{#      <li class="disabled"><span>&laquo;</span></li>#}
-{#    {% endif %}#}
-{#    {% for i in paginator.page_range %}#}
-{#      {% if page_obj.number == i %}#}
-{#        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>#}
-{#      {% else %}#}
-{#        <li><a href="?page={{ i }}">{{ i }}</a></li>#}
-{#      {% endif %}#}
-{#    {% endfor %}#}
-{#    {% if page_obj.has_next %}#}
-{#      <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>#}
-{#    {% else %}#}
-{#      <li class="disabled"><span>&raquo;</span></li>#}
-{#    {% endif %}#}
-{#    </ul>#}
-{#{% endif %}#}
+

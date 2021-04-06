@@ -77,7 +77,9 @@ class ActivateView(View):
 
 @login_required()
 def Logout(request):
-    """logout logged in user"""
+    """
+    logout logged in user
+    """
     logout(request)
     return HttpResponseRedirect(reverse_lazy('login'))
 

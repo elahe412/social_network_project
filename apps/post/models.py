@@ -19,9 +19,15 @@ class Post(models.Model):
         return str(self.content[:20])
 
     def num_likes(self):
+        """
+        :return: a post's likes number
+        """
         return self.liked.all().count()
 
     def num_comments(self):
+        """
+        :return: a post's comments number
+        """
         return self.comment_set.all().count()
 
     class Meta:
