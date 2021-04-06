@@ -1,8 +1,12 @@
 import random
 from django import template
-from apps.profiles.models import Profile
+from apps.profiles.models import Profile, FollowRequest
 
 register = template.Library()
+
+@register.filter(name='counting')
+def number_of_requests(user):
+    return FollowRequest.objects.filter(following=user).count()
 
 
 @register.inclusion_tag('sidebar.html')

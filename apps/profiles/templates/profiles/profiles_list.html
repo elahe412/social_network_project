@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load post_custom_tags %}
+{% load profile_tags %}
 {% block title %}
     Profiles List
 {% endblock title %}
@@ -15,9 +16,9 @@
 
     </div>
     <div id="main">
-        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+{#        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>#}
         <div class="container mt-3" style="margin-top: 1.5em">
-            <input for="email" class="form-control" id="myInput" type="text" placeholder="Search..">
+{#            <input for="email" class="form-control" id="myInput" type="text" placeholder="Search..">#}
             <br>
             <ul class="list-group list-group-flush" id="myList">
                 {% for profile in profiles_list %}
@@ -41,16 +42,16 @@
         }
     </script>
     {#    search scripts#}
-    <script>
-        $(document).ready(function () {
-            $("#myInput").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $("#myList a").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
-    </script>
+{#    <script>#}
+{#        $(document).ready(function () {#}
+{#            $("#myInput").on("keyup", function () {#}
+{#                var value = $(this).val().toLowerCase();#}
+{#                $("#myList a").filter(function () {#}
+{#                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)#}
+{#                });#}
+{#            });#}
+{#        });#}
+{#    </script>#}
     <div style="margin-top: 2em">
         {% if is_paginated %}
             <ul class="pagination">

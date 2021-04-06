@@ -47,8 +47,8 @@ class ProfileDetail(LoginRequiredMixin,DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profile = Profile.objects.get(email__iexact=self.request.user)
-        sent_request = FollowRequest.objects.filter(follower=profile)
-        received_request = FollowRequest.objects.filter(following=profile)
+        sent_request = FollowRequest.objects.filter(follower=profile).filter(status='send')
+        received_request = FollowRequest.objects.filter(following=profile).filter(status='send')
         sent_requests = []
         received_requests = []
         for item in received_request:

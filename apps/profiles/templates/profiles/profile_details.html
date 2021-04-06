@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load post_custom_tags %}
+{% load profile_tags %}
 {% block content %}
     <head>
         <title>{{ object.email }} profile</title>
@@ -11,8 +12,13 @@
         <a href='{% url 'posts:new_post' %}' style="text-decoration: none;"> New post</a>
         <a href='{% url 'profiles:setting' %}' style="text-decoration: none;"> Setting</a>
         <a href='{% url 'logout' %}' style="text-decoration: none"> Logout</a>
+{#        {% block random_profiles %}#}
         <a style="color: white">Suggestions</a>
-        <a href="" style="text-decoration: none;">  {% random_profiles request.user %}</a>
+        <ul>
+        {% random_profiles request.user %}
+{#        {% endblock random_profiles %}#}
+        </ul>
+
 
     </div>
     <div id="main">
