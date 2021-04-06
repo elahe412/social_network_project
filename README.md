@@ -1,4 +1,4 @@
-social_network_project
+#social_network_project
 This is a django project with basic abilities of social networks like:
 -Register and login user
 -Send/accept Follow requests
